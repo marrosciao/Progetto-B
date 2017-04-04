@@ -1,15 +1,12 @@
 IDEE: 
-Idee:
 Creo Game : 
 - inizializza con 3 giocatori
 - crea la Map **
 - assegna random i territori ai giocatori (chiama il metodo della map che lo fa, passandogli la lista dei giocatori)
 
-
-
-
+---------------------------------
 Game(){
-while(!vincitoreDellaPartita){
+while(winner == null){
 
 rinforzi()
 
@@ -19,9 +16,9 @@ while(activePlayer.iWantToAttack() && Map.L'activePlayerPuoAttaccareDaQualcheTer
 	activePlayer.chooseNrArmies('a');
 	countries[1].getPlayer().chooseNrArmies('d');
 
-	boolean conquistato= attack(Countries, nrA, nrD);	// restituisce il numero di armate perse dall'attaccante e dal difensore	
+	boolean conquistato= attack(Countries, nrA, nrD);	// restituisce true se il territorio è stato conquistato
 	if(conquistato){
-		Map.update(Country[2], nrA);
+		Map.update(Country[2], nrA); 
 		map.checkIfWinner(activePlayer);
 	}
 
@@ -38,10 +35,46 @@ attack(){
 
 }
 
-** Inizializzazione map:
-legge i files, crea i territori con un numero fisso di armate
-
+---------------------------------
 Player(){
 
 chooseFightingCountries(){
 	game.getFightingCountries();
+}
+
+chooseNrArmies(char c){
+	switch(c){
+	case('a')
+		limite = min(3, nrArmate-1)
+	case('d')
+		limite = min(3, nrArmate)
+}
+
+
+}
+---------------------------------
+Game(){
+
+getFightingCountries(){
+	Countries[2] = Map.getFightingCountries(activePlayer); // con criterio
+}
+
+---------------------------------
+** Inizializzazione map:
+legge i files, crea i territori con un numero fisso di armate
+Map(){
+
+Countries[2] getFightingCountries(activePlayer){
+	ritorna un country dell'active player con più di un'armata e un suo confinante (che non sia dell'active player)
+}
+
+update(Countries[2], nrA){
+	Setta la mappa CountryPlayer:
+	- Ricava da Countries[0] il proprietario del territorio vincitore
+	- Setta come Value corrisponente alla key Country[1] questo giocatore
+	Sposta i carrarmati:
+	- Sottrae a Country[0] nrA
+	- Aggiunge a Country[1] nrA
+
+}
+}
