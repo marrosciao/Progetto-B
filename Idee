@@ -1,0 +1,47 @@
+IDEE: 
+Idee:
+Creo Game : 
+- inizializza con 3 giocatori
+- crea la Map **
+- assegna random i territori ai giocatori (chiama il metodo della map che lo fa, passandogli la lista dei giocatori)
+
+
+
+
+Game(){
+while(!vincitoreDellaPartita){
+
+rinforzi()
+
+while(activePlayer.iWantToAttack() && Map.L'activePlayerPuoAttaccareDaQualcheTerritorio){
+
+	Countries[2] = activePlayer.chooseFightingCountries(); // L'attaccante e il difensore
+	activePlayer.chooseNrArmies('a');
+	countries[1].getPlayer().chooseNrArmies('d');
+
+	boolean conquistato= attack(Countries, nrA, nrD);	// restituisce il numero di armate perse dall'attaccante e dal difensore	
+	if(conquistato){
+		Map.update(Country[2], nrA);
+		map.checkIfWinner(activePlayer);
+	}
+
+}
+
+nextTurn();
+
+}
+
+attack(){
+	genera i numeri random, ricava quante armate perse dai due giocatori, rimuove queste armate
+	return boolean il territorio è stato conquistato
+}
+
+}
+
+** Inizializzazione map:
+legge i files, crea i territori con un numero fisso di armate
+
+Player(){
+
+chooseFightingCountries(){
+	game.getFightingCountries();
