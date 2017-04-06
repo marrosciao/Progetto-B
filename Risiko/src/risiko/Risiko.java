@@ -15,7 +15,7 @@ public class Risiko {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        
+        int a=100;
         System.out.println("ciaone");
         
         
