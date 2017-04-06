@@ -28,7 +28,7 @@ class Player {
 
     }
 
-    /** DA FARE: P3
+    /** DA FARE: P3 (2)
      * Ritorna il numero di armate con cui attaccare/difendere.
      *
      * @param c indica se il giocatore è l'attaccante o il "difensore" ('a'
@@ -42,7 +42,7 @@ class Player {
         return 0;
     }
 
-    /** DA FARE : P3
+    /** DA FARE : P3 (3) continua in Game
      * Ritorna un boolean random.
      *
      * @return true se il giocatore vuole attaccare, false se vuole concludere

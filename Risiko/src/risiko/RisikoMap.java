@@ -31,7 +31,7 @@ public class RisikoMap {
 
     }
 
-    /** DA FARE : P1
+    /** DA FARE : P1 (1)
      * Legge il file specificato a urlCountries, di ogni riga letta prende solo
      * il primo token e builda la Country relativa e la mette in CountryPlayer
      * @throws qualche eccezione legata alla lettura del file
@@ -40,7 +40,7 @@ public class RisikoMap {
 
     }
 
-    /** DA FARE : P1
+    /** DA FARE : P1 (2)
      * Legge il file specificato da urlCountries, per ogni country costruisce
      * una List di vicini, salva in CountryNeighbor il territorio e la lista di vicini.
      * @throws qualche eccezione legata alla lettura del file
@@ -49,7 +49,7 @@ public class RisikoMap {
 
     }
 
-    /** DA FARE : P1
+    /** DA FARE : P1 (3)
      * Effettua l'assegnazione iniziale dei territori ai giocatori (random).
      *
      * @param players
@@ -67,7 +67,7 @@ public class RisikoMap {
         return countryPlayer.get(country);
     }
 
-    /** DA FARE : P1
+    /** DA FARE : P1 (4)
      * Esegue la fase di rinforzo di inizio turno. Nr armate bonus =
      * ceil(nrTerritoriGiocatore/3) e le distribuisce a caso sui territori del
      * giocatore
@@ -78,7 +78,7 @@ public class RisikoMap {
 
     }
     
-    /** DA FARE : P2
+    /** DA FARE : P2 (1)
      * Ritorna una lista dei territori del giocatore (per ora inutile)
      * @param player
      * @return 
@@ -98,7 +98,7 @@ public class RisikoMap {
         return countryNeighbors.get(country);
     }
 
-    /** DA FARE : P2
+    /** DA FARE : P2 (2)
      * Controlla se il giocatore può ancora attaccare da uno dei suoi territori.
      *
      * @param activePlayer
@@ -109,7 +109,7 @@ public class RisikoMap {
         return false;
     }
 
-    /** DA FARE : P2
+    /** DA FARE : P2 (3)
      * Sceglie il territorio attaccante e attaccato dal giocatore. 
      * (Idealmente : continua a tirare a caso coppie di countries (e a chiamare
      * verifyAttack per ognuna di loro, finché verify attack non restituisce true)
@@ -123,7 +123,7 @@ public class RisikoMap {
         return null;
     }
 
-    /** DA FARE : P2
+    /** DA FARE : P2 (4)
      * Controlla che l'attacco sia valido. return true se Country[0] è del
      * giocatore di turno e ha di un'armata, Country[1] è di un altro giocatore, e
      * i due territori sono confinanti, false altrimenti.
@@ -136,7 +136,7 @@ public class RisikoMap {
         return false;
     }
 
-    /** DA FARE : P2
+    /** DA FARE : P2 (5)
      * Metodo chiamato nel caso in cui un giocatore abbia conquistato un
      * territorio. Setta il nuovo proprietario del territorio appena conquistato
      * (countryPlayer) e muove tante armate quante sono quelle con cui è stato
@@ -153,7 +153,7 @@ public class RisikoMap {
 
     }
 
-    /** DA FARE : P3
+    /** DA FARE : P3 (1) continua in Player
      * Metodo chiamato nel caso in cui un giocatore abbia conquistato un
      * territorio. La mappa controlla se ha raggiunto il suo obbiettivo (in
      * questa prima versione del gioco conquistare il mondo).

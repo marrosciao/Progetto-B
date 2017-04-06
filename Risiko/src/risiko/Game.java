@@ -18,7 +18,7 @@ class Game {
 
     }
 
-    /** DA FARE: P3
+    /** DA FARE: P3 (4)
      * Inizializza il gioco.
      * Ovvero chiama il metodo della mappa per l'assegnazione
      * iniziale dei territori ai giocatori - assignCountriesToPlayers() - ,
@@ -80,7 +80,7 @@ class Game {
         map.reinforce(activePlayer);
     }
 
-    /** DA FARE: P3
+    /** DA FARE: P3 (5)
      * Setta come activePlayer il successivo nel giro.
      */
     private void nextTurn() {
@@ -97,7 +97,7 @@ class Game {
         return map.getFightingCountries(player);
     }
 
-    /** DA FARE : P4
+    /** DA FARE : P4 (1)
      * Simula l'attacco. Chiama il metodo per calcolare il risulato del
      * combattimento (computeAttackResult(nrA, nrD)),
      * che gli restituisce il numero di armate perse dai due
@@ -112,7 +112,7 @@ class Game {
         return false;
     }
 
-    /** DA FARE: P4
+    /** DA FARE: P4 (2)
      * Calcola il risultato del combattimento. Dato il numero di armate
      * attaccanti e di armate in difesa, chiama il metodo per il lancio dei dadi
      * (rollDice(nrDadi)), che restituisce il risultato del lancio dei dadi già
@@ -127,7 +127,7 @@ class Game {
         return new int[2];
     }
 
-    /** DA FARE: P4
+    /** DA FARE: P4 (3)
      * Simula il lancio di dadi.(usa rollDice() che simula il lancio di un solo dado)
      *
      * @param nrDice numero di dadi da tirare
@@ -138,7 +138,7 @@ class Game {
         return null;
     }
 
-    /** DA FARE : P4
+    /** DA FARE : P4 (4)
      * Simula il lancio di un dado
      *
      * @return un numero random da 1 a 6
