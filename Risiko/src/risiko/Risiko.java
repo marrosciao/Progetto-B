@@ -20,6 +20,10 @@ public class Risiko {
         
         
          
+        System.out.println("ciao");
+         System.out.println("ciao");
+                 System.out.println("andrea");
+
     }
     
 }
