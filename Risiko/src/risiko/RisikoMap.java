@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -116,6 +117,7 @@ public class RisikoMap {
     public void assignCountriesToPlayers(List<Player> players) throws Exception {
 
         List<Country> countries = getCountriesList();
+        Collections.shuffle(countries);
         int nCountries = this.countryPlayer.size();
         int round = 0;
         while (nCountries != 0) {
@@ -126,12 +128,14 @@ public class RisikoMap {
                 }
                 this.countryPlayer.put(countries.get(i + round), players.get(i));
                 nCountries--;
+                //System.out.println(countries.get(i + round).getName()+" "+ players.get(i));
             }
             round += players.size();
             
         }
 
     }
+    
 
     private List<Country> getCountriesList() { 
         List<Country> countries = new ArrayList<>();
