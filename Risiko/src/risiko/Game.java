@@ -1,22 +1,20 @@
 package risiko;
 
+import java.util.Arrays;
 import java.util.List;
 
 class Game {
-
     private RisikoMap map;
     private List<Player> players;
     private Player activePlayer;
     private Player winner;
 
     public Game(List<Player> players) throws Exception {
-
         this.players = players;
         this.activePlayer = null;
         this.winner = null;
         this.map = new RisikoMap(); // ELISA aggiunta per inizializzare la mappa
         init(); 
-
     }
 
     /**
@@ -37,11 +35,9 @@ class Game {
         /*while (this.winner == null) {
             playNextTurn();
         }*/
-        
     }
 
     public void playNextTurn() {
-
         // Setto come giocatoreAttivo il prossimo giocatore
         nextTurn();
 
@@ -58,19 +54,17 @@ class Game {
     }
 
     private void performAttackPhase() {
-
         Country[] countries = activePlayer.chooseFightingCountries();
-        Player defender = map.getPlayerFromCountry(countries[1]);
+        //Country[] countries = map.getFightingCountries(activePlayer);   //ANDREA, nemmeno a me convince molto il megaGiro dell'istruzione precedente, con l'istruzione della riga corrente, si dovrebbero ottenere gli stessi risultati saltando un paio di passaggi.
+        Player defendPlayer = map.getPlayerFromCountry(countries[1]);
         int nrA = activePlayer.chooseNrArmies('a', countries[0]);
-        int nrD = defender.chooseNrArmies('d', countries[1]);
+        int nrD = defendPlayer.chooseNrArmies('d', countries[1]);
 
         boolean conquered = attack(countries, nrA, nrD);
 
         if (conquered) { // TRUE se il territorio è stato conquistato
-
             map.updateOnConquer(countries, nrA);
             winner = (map.checkIfWinner(activePlayer)) ? activePlayer : null;
-
         }
     }
 
@@ -100,54 +94,57 @@ class Game {
     }
 
     /**
-     * DA FARE : P4 (1) Simula l'attacco. Chiama il metodo per calcolare il
-     * risulato del combattimento (computeAttackResult(nrA, nrD)), che gli
-     * restituisce il numero di armate perse dai due giocatori, quindi rimuove
-     * queste armate dai due territori (Country.removeArmies()) null     (<<BOH potremmo anche fare che il metodo removeArmies restituisca un boolean per
-     * far capire se è stato conquistato, ma da quello che ho capito dalle
-     * ultime lezioni è meglio differenziare i due metodi) @param countries>>
-     *
-     * @param nrA @param nrD @return true se il territorio è stato conquistato
-     * (lo chiede alla mappa, (map.isConquered(Country))
+     * @param countries
+     * @param nrA 
+     * @param nrD 
+     * @return true se il territorio è stato conquistato
      */
-    private boolean attack(Country[] countries, int nrA, int nrD) {
-        return false;
+    public boolean attack(Country[] countries, int nrA, int nrD) {
+        int armiesLost[] = computeAttackResult(nrA, nrD);
+        countries[0].removeArmies(armiesLost[0]);
+        countries[1].removeArmies(armiesLost[1]);
+        return map.isConquered(countries[1]);
     }
 
     /**
-     * DA FARE: P4 (2) Calcola il risultato del combattimento. Dato il numero di
-     * armate attaccanti e di armate in difesa, chiama il metodo per il lancio
-     * dei dadi (rollDice(nrDadi)), che restituisce il risultato del lancio dei
-     * dadi già in ordine decrescente, confronta i risultati ottenuti e calcola
-     * quante armate sono state perse dall'attaccante&difensore. (NB nel caso
-     * che i due numeri siano ==, vince il difensore)
-     *
      * @return array da 2 elementi, il primo valore è il numero di armate perse
      * dall'attaccante, il secondo il numero di armate perse dal difensore.
      */
-    private int[] computeAttackResult(int nrA, int nrD) {
-        return new int[2];
+    public int[] computeAttackResult(int nrA, int nrD) {
+        int resultsDiceAttack[] = rollDice(nrA);
+        int resultsDiceDefens[] = rollDice(nrD);
+        int armiesLost[]        = new int[2];
+        int min=(nrA>nrD) ? nrD : nrA;
+        for(int i=0; i<min;i++)
+            if(resultsDiceAttack[i]>resultsDiceDefens[i]) 
+                armiesLost[1]++;
+            else 
+                armiesLost[0]++;
+        return armiesLost;
     }
 
     /**
-     * DA FARE: P4 (3) Simula il lancio di dadi.(usa rollDice() che simula il
-     * lancio di un solo dado)
-     *
      * @param nrDice numero di dadi da tirare
-     * @return un array[nrDadi] con i risultati del lancio !!! in ordine
-     * decrescente.!!
+     * @return un array[nrDadi]con i risultati del lancio in ordine decrescente!
      */
     private int[] rollDice(int nrDice) {
-        return null;
+        int dices[] = new int[nrDice]; 
+        int tmp;
+        for (int i=0; i<nrDice; i++) 
+            dices[i] = rollDice();
+        Arrays.sort(dices);             //ANDREA, pultroppo non ho trovato un metodo di libreria per ordinare in modo decrescente dei tipi di dati primitivi
+        if(nrDice>1){                   
+            tmp=dices[0];
+            dices[0]=dices[nrDice-1];
+            dices[nrDice-1]=tmp;
+        }
+        return dices;
     }
 
     /**
-     * DA FARE : P4 (4) Simula il lancio di un dado
-     *
      * @return un numero random da 1 a 6
      */
     private int rollDice() {
-        return 0;
+        return (int)(Math.random()*6)+1;
     }
-
 }
