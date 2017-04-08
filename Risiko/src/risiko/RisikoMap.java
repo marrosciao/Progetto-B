@@ -11,7 +11,8 @@ import java.util.StringTokenizer;
 
 public class RisikoMap {
 
-    private final String urlCountries = "files/territori.txt";
+    private final int DEFAULT_ARMIES = 3; //ELISA ho messo un default armies iniziale per ogni country
+    private final String urlCountries = "files/territori.txt"; //ELISA in files ci sono due file di territori perchè nel primo non leggeva bene le cose
     private Map<Country, Player> countryPlayer;
     private Map<Country, List<Country>> countryNeighbors;
 
@@ -52,13 +53,14 @@ public class RisikoMap {
                     StringTokenizer st = new StringTokenizer(line, ",");
                     if (st.hasMoreTokens()) {
                         Country country = new Country(st.nextToken());
+                        country.setArmies(DEFAULT_ARMIES);
                         this.countryPlayer.put(country, null);
                     }
                 }
             }
 
         } catch (FileNotFoundException ex) {
-            System.out.println("File non trovato");
+            System.out.println("File not found");
         }
 
     }
@@ -99,7 +101,7 @@ public class RisikoMap {
             }
 
         } catch (FileNotFoundException ex) {
-            System.out.println("File non trovato");
+            System.out.println("File not found");
         }
 
     }
@@ -113,14 +115,16 @@ public class RisikoMap {
     public void assignCountriesToPlayers(List<Player> players) throws Exception {
 
         int nCountries = this.countryPlayer.size();
+
         int nPlayers = players.size();
+
         int countriesForPlayer = nCountries / nPlayers;
         int moreCountries = nCountries % nPlayers;
 
         Map<Player, Integer> toDistribute = new HashMap<>();
         for (Player p : players) {
 
-            if (moreCountries != 0) { // se ci sono moreCountries dò un territorio in più ai primi nella lista 
+            if (moreCountries != 0) { // ELISA se ci sono moreCountries dò un territorio in più ai primi nella lista 
                 toDistribute.put(p, countriesForPlayer + 1);
                 moreCountries--;
             } else {
@@ -128,24 +132,29 @@ public class RisikoMap {
             }
         }
 
+        Player choosen = null;
         while (nCountries != 0) {
             for (Map.Entry<Country, Player> entry : this.countryPlayer.entrySet()) {
-                Player choosen = choosePlayerForCountry(toDistribute, players);
+                while (choosen == null) {
+                    choosen = choosePlayerForCountry(toDistribute, players);
+                }
                 entry.setValue(choosen);
-                toDistribute.put(choosen, toDistribute.get(choosen)-1);
+                toDistribute.put(choosen, toDistribute.get(choosen) - 1);
                 nCountries--;
-                System.out.println(entry.getKey().getName()+" "+entry.getValue());
+                choosen = null;
+                //System.out.println(entry.getKey().getName()+" "+entry.getValue());
             }
         }
 
     }
 
     private Player choosePlayerForCountry(Map<Player, Integer> toDistribute, List<Player> players) {
-        int PlayerIndex = (int) Math.round(Math.random() * players.size()) + 1;
-        if (toDistribute.get(players.get(PlayerIndex)) > 0) { 
-            return players.get(PlayerIndex);
+        int playerIndex = (int) Math.floor(Math.random() * players.size());
+        // System.out.println(playerIndex);
+        if (toDistribute.get(players.get(playerIndex)) > 0) {
+            return players.get(playerIndex);
         } else {
-            return choosePlayerForCountry(toDistribute, players);
+            return null;
         }
     }
 
@@ -167,6 +176,25 @@ public class RisikoMap {
      * @param player il giocatore di turno
      */
     void reinforce(Player player) {
+        List<Country> myCountries = new ArrayList<>();
+        for (Map.Entry<Country, Player> entry : this.countryPlayer.entrySet()) {
+            if (entry.getValue() == player) {
+                myCountries.add(entry.getKey());
+            }
+        }
+
+        int bonus = (int) Math.floor(myCountries.size() / 3); //ELISA ho messo floor e non ceil perchè nel gioco si va a ribasso secondo me
+
+        while (bonus != 0) {
+            int c = (int) Math.floor(Math.random() * myCountries.size());
+            for (int i = 0; i < myCountries.size(); i++) {
+                if (c == i) {
+
+                    myCountries.get(i).addArmies(1);
+                    bonus--;
+                }
+            }
+        }
 
     }
 
@@ -199,7 +227,7 @@ public class RisikoMap {
      * abbia più di un'armata, false in caso contrario.
      */
     public boolean playerCanAttack(Player player) {
-        return Math.round(Math.random()) == 0; //ELISA l'ho fatto per farlo andare
+        return false; 
     }
 
     /**
@@ -213,11 +241,7 @@ public class RisikoMap {
      * quella attaccato
      */
     public Country[] getFightingCountries(Player player) {
-
-        Country[] c = new Country[1]; //ELISA vs nullPointer
-        c[0] = new Country("prova");
-        return c;
-        //return null;
+        return null;
     }
 
     /**

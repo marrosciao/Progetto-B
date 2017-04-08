@@ -21,15 +21,14 @@ class Player {
      * : 2) di country, in cui country[0] è l'attaccante e country[1]
      * l'attaccato
      */
-    
     public Country[] chooseFightingCountries() {
 
-        return game.getFightingCountries(this);
-
+       return game.getFightingCountries(this); 
+       
     }
 
-    /** DA FARE: P3 (2)
-     * Ritorna il numero di armate con cui attaccare/difendere.
+    /**
+     * DA FARE: P3 (2) Ritorna il numero di armate con cui attaccare/difendere.
      *
      * @param c indica se il giocatore è l'attaccante o il "difensore" ('a'
      * attaccante 'd' "difensore" )
@@ -42,14 +41,15 @@ class Player {
         return 0;
     }
 
-    /** DA FARE : P3 (3) continua in Game
-     * Ritorna un boolean random.
+    /**
+     * DA FARE : P3 (3) continua in Game Ritorna un boolean random.
      *
      * @return true se il giocatore vuole attaccare, false se vuole concludere
      * la fase di attacco.
      */
     public boolean wants2Attack() {
-        return false;
+        return false; 
+
     }
 
 }
