@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.StringTokenizer;
 
 public class RisikoMap {
@@ -74,7 +75,7 @@ public class RisikoMap {
      */
     private void buildCountryNeighbors() throws Exception {
         List<Country> neighbours = new ArrayList<>();
-        Country country = new Country("");
+        Country country = null;
         try (BufferedReader br = new BufferedReader(new FileReader(urlCountries))) {
             String line;
             while ((line = br.readLine()) != null) {
@@ -114,49 +115,32 @@ public class RisikoMap {
      */
     public void assignCountriesToPlayers(List<Player> players) throws Exception {
 
+        List<Country> countries = getCountriesList();
         int nCountries = this.countryPlayer.size();
-
-        int nPlayers = players.size();
-
-        int countriesForPlayer = nCountries / nPlayers;
-        int moreCountries = nCountries % nPlayers;
-
-        Map<Player, Integer> toDistribute = new HashMap<>();
-        for (Player p : players) {
-
-            if (moreCountries != 0) { // ELISA se ci sono moreCountries dò un territorio in più ai primi nella lista 
-                toDistribute.put(p, countriesForPlayer + 1);
-                moreCountries--;
-            } else {
-                toDistribute.put(p, countriesForPlayer);
-            }
-        }
-
-        Player choosen = null;
+        int round = 0;
         while (nCountries != 0) {
-            for (Map.Entry<Country, Player> entry : this.countryPlayer.entrySet()) {
-                while (choosen == null) {
-                    choosen = choosePlayerForCountry(toDistribute, players);
+
+            for (int i = 0; i < players.size(); i++) {
+                if(nCountries==0){
+                    break;
                 }
-                entry.setValue(choosen);
-                toDistribute.put(choosen, toDistribute.get(choosen) - 1);
+                this.countryPlayer.put(countries.get(i + round), players.get(i));
                 nCountries--;
-                choosen = null;
-                //System.out.println(entry.getKey().getName()+" "+entry.getValue());
             }
+            round += players.size();
+            
         }
 
     }
 
-    private Player choosePlayerForCountry(Map<Player, Integer> toDistribute, List<Player> players) {
-        int playerIndex = (int) Math.floor(Math.random() * players.size());
-        // System.out.println(playerIndex);
-        if (toDistribute.get(players.get(playerIndex)) > 0) {
-            return players.get(playerIndex);
-        } else {
-            return null;
+    private List<Country> getCountriesList() { 
+        List<Country> countries = new ArrayList<>();
+        for (Map.Entry<Country, Player> entry : this.countryPlayer.entrySet()) {
+            countries.add(entry.getKey());
         }
+        return countries;
     }
+
 
     /**
      * Ritorna il giocatore a cui appartiene quel territorio
@@ -227,7 +211,7 @@ public class RisikoMap {
      * abbia più di un'armata, false in caso contrario.
      */
     public boolean playerCanAttack(Player player) {
-        return false; 
+        return false;
     }
 
     /**
