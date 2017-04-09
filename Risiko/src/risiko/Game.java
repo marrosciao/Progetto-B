@@ -2,6 +2,8 @@ package risiko;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Random;
 
 class Game {
     private RisikoMap map;
@@ -27,7 +29,13 @@ class Game {
      * cui l'url del file dei territori fosse sbagliato.
      */
     private void init() throws Exception {
+    
         map.assignCountriesToPlayers(players);
+        
+        Random randomGenerator = new Random();
+        int randomIndex = randomGenerator.nextInt(players.size());
+        activePlayer = players.get(randomIndex);
+
     }
 
     public void play() {
@@ -81,6 +89,12 @@ class Game {
      */
     private void nextTurn() {
         
+        ListIterator<Player> iter = players.listIterator(players.indexOf(activePlayer) + 1);
+        
+        if(iter.hasNext())
+            activePlayer = iter.next();
+        else
+            activePlayer = players.get(0);
     }
 
     /**
