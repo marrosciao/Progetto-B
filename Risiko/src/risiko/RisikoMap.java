@@ -290,6 +290,7 @@ public class RisikoMap {
         this.countryPlayer.put(countries[1], attack);
         countries[0].removeArmies(armies);
         countries[1].setArmies(armies);
+        
     }
 
     /**
