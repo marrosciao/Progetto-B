@@ -122,7 +122,7 @@ public class RisikoMap {
         int round = 0;
         while (nCountries != 0) {
             this.countryPlayer.put(countries.get(round), nextPlayer(players, round));
-            System.out.println(countries.get(round).getName()+" "+nextPlayer(players, round));
+            //System.out.println(countries.get(round).getName()+" "+nextPlayer(players, round));
             round++;
             nCountries--;
         }
