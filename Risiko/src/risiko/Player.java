@@ -1,5 +1,7 @@
 package risiko;
 
+import java.util.Random;
+
 class Player {
 
     private Game game;
@@ -9,22 +11,20 @@ class Player {
     }
 
     /**
-     * >>>>>>>>>>>> BOH RAGA MEGA DUBBIO <<<<<<<<<<<<<<<<<<<<<<<< Demanda al
-     * gioco di scegliere il territorio attaccante e attaccato. (non mi ricordo
-     * perché sia necessario fare questo giro: immaginando che
+     * BOH RAGA MEGA DUBBIO.
+     * Demanda al gioco di scegliere il territorio attaccante e attaccato.
+     * (non mi ricordo perché sia necessario fare questo giro: immaginando che
      * player.getFightingCountries() sia chiamato in game, il giocatore così
      * facendo chiede a game di scegliere le sue fightingCountries, e poi le
      * restituisce a game.... Non è forse meglio che giocatore invece di avere
      * game come attributo abbia map a cui chiede i suoi territori, scelga
      * secondo qualche criterio l'attaccante, richieda alla map i confinanti e
-     * poi scelga l'attaccato o una cosa del genere?). @return un'array (length
-     * : 2) di country, in cui country[0] è l'attaccante e country[1]
+     * poi scelga l'attaccato o una cosa del genere?). 
+     * @return un'array (length : 2) di country, in cui country[0] è l'attaccante e country[1]
      * l'attaccato
      */
     public Country[] chooseFightingCountries() {
-
-       return game.getFightingCountries(this); 
-       
+       return game.getFightingCountries(this);      
     }
 
     /**
@@ -38,7 +38,22 @@ class Player {
      * armate per la difesa
      */
     public int chooseNrArmies(char c, Country country) {
-        return 0;
+        
+        Random rand = new Random();
+        int limite=0;
+        
+        switch(c){
+        
+            case('a'):
+                limite=Math.min( 3, country.getArmies()-1 );
+                break;
+                
+            case('d'):
+                limite=Math.min( 3, country.getArmies() );
+                break;
+ 
+        }
+        return rand.nextInt(limite)+1;
     }
 
     /**
@@ -48,8 +63,9 @@ class Player {
      * la fase di attacco.
      */
     public boolean wants2Attack() {
-        return false; 
-
+        
+        Random randomGenerator = new Random();
+        
+        return randomGenerator.nextBoolean(); 
     }
-
 }
