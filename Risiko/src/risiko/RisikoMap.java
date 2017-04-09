@@ -274,7 +274,10 @@ public class RisikoMap {
      *
      */
     public boolean checkIfWinner(Player player) {
-        return false;
+        
+        List<Country> countryList = new ArrayList<>(countryPlayer.keySet()); //si potrebbe usare anche per il getCountryList?
+        
+        return getMyCountries(player).containsAll(countryList); 
     }
 
     /**
