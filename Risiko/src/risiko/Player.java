@@ -1,5 +1,7 @@
 package risiko;
 
+import java.util.Random;
+
 class Player {
 
     private Game game;
@@ -36,7 +38,22 @@ class Player {
      * armate per la difesa
      */
     public int chooseNrArmies(char c, Country country) {
-        return 0;
+        
+        Random rand = new Random();
+        int limite=0;
+        
+        switch(c){
+        
+            case('a'):
+                limite=Math.min( 3, country.getArmies()-1 );
+                break;
+                
+            case('d'):
+                limite=Math.min( 3, country.getArmies() );
+                break;
+ 
+        }
+        return rand.nextInt(limite)+1;
     }
 
     /**
@@ -46,6 +63,9 @@ class Player {
      * la fase di attacco.
      */
     public boolean wants2Attack() {
-        return false; 
+        
+        Random randomGenerator = new Random();
+        
+        return randomGenerator.nextBoolean(); 
     }
 }
