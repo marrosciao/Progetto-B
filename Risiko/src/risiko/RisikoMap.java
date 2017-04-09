@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.stream.Collectors;
 
 public class RisikoMap {
 
@@ -191,7 +192,8 @@ public class RisikoMap {
      * @return
      */
     public List<Country> getMyCountries(Player player) {
-        return null;
+        return this.countryPlayer.entrySet().stream().filter(mapEntry -> mapEntry.getValue().equals(player)).map(mapE -> mapE.getKey()).collect(Collectors.toList());
+        //return null;
     }
 
     /**
@@ -212,6 +214,12 @@ public class RisikoMap {
      * abbia più di un'armata, false in caso contrario.
      */
     public boolean playerCanAttack(Player player) {
+        List<Country> availableCountries = this.getMyCountries(player);
+        for(Country c:availableCountries){
+            if(c.getArmies()>1){
+                return true;
+            }
+        }
         return false;
     }
 
@@ -226,6 +234,23 @@ public class RisikoMap {
      * quella attaccato
      */
     public Country[] getFightingCountries(Player player) {
+        int attackIndex, defenseIndex;
+        Country[] selected = new Country[2];
+        
+        List<Country> attack = this.getMyCountries(player);
+        Collections.shuffle(attack);
+        for (Country a : attack) {
+            List<Country> defense = this.getNeighbors(a);
+            Collections.shuffle(defense);
+            for(Country d:defense){
+                selected[0]=a;
+                selected[1]=d;
+                if(verifyAttack(selected,player)){
+                    return selected;
+                }
+            }
+        }
+        
         return null;
     }
 
@@ -238,7 +263,11 @@ public class RisikoMap {
      * @param player il giocatore di turno.
      */
     public boolean verifyAttack(Country[] countries, Player player) {
-
+        if (this.countryPlayer.get(countries[0]).equals(player) && this.countryPlayer.get(countries[0]) != null && countries[0].getArmies() > 1) {
+            if (!this.countryPlayer.get(countries[1]).equals(player) && this.countryPlayer.get(countries[1]) != null && countries[1].getArmies() > 1) {
+                return true;
+            }
+        }
         return false;
     }
 
@@ -257,7 +286,10 @@ public class RisikoMap {
      * spostate dal territorio attaccante a quello appena conquistato.
      */
     public void updateOnConquer(Country[] countries, int armies) {
-
+        Player attack =this.countryPlayer.get(countries[1]);
+        this.countryPlayer.put(countries[1], attack);
+        countries[0].removeArmies(armies);
+        countries[1].setArmies(armies);
     }
 
     /**
