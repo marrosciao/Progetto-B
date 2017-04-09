@@ -121,30 +121,27 @@ public class RisikoMap {
         int nCountries = this.countryPlayer.size();
         int round = 0;
         while (nCountries != 0) {
-
-            for (int i = 0; i < players.size(); i++) {
-                if(nCountries==0){
-                    break;
-                }
-                this.countryPlayer.put(countries.get(i + round), players.get(i));
-                nCountries--;
-                //System.out.println(countries.get(i + round).getName()+" "+ players.get(i));
-            }
-            round += players.size();
-            
+            this.countryPlayer.put(countries.get(round), nextPlayer(players, round));
+            System.out.println(countries.get(round).getName()+" "+nextPlayer(players, round));
+            round++;
+            nCountries--;
         }
 
     }
-    
 
-    private List<Country> getCountriesList() { 
+    private Player nextPlayer(List<Player> players, int round) {
+        
+            return players.get(round%(players.size()));
+        
+    }
+
+    private List<Country> getCountriesList() {
         List<Country> countries = new ArrayList<>();
         for (Map.Entry<Country, Player> entry : this.countryPlayer.entrySet()) {
             countries.add(entry.getKey());
         }
         return countries;
     }
-
 
     /**
      * Ritorna il giocatore a cui appartiene quel territorio
