@@ -1,0 +1,4 @@
+territorio1,territorio2,territorio3
+territorio2,territorio1,territorio4
+territorio3,territorio1
+territorio4,territorio2

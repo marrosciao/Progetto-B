@@ -6,6 +6,10 @@ class Player {
 
     private Game game;
 
+    public Player(Game game){
+        this.game =game;
+    }
+    
     public void setGame(Game game) {
         this.game = game;
     }
@@ -28,7 +32,7 @@ class Player {
     }
 
     /**
-     * DA FARE: P3 (2) Ritorna il numero di armate con cui attaccare/difendere.
+     * Ritorna il numero di armate con cui attaccare/difendere.
      *
      * @param c indica se il giocatore è l'attaccante o il "difensore" ('a'
      * attaccante 'd' "difensore" )
@@ -36,6 +40,7 @@ class Player {
      * @return un int random tra 1 e: - min(3, nrArmateSulTerritorio-1) nel caso
      * di armate per l'attacco - min(3, nrArmateSulTerritorio) nel caso di
      * armate per la difesa
+     * @author Federico
      */
     public int chooseNrArmies(char c, Country country) {
         
@@ -57,15 +62,17 @@ class Player {
     }
 
     /**
-     * DA FARE : P3 (3) continua in Game Ritorna un boolean random.
+     * Ritorna un boolean random.
      *
      * @return true se il giocatore vuole attaccare, false se vuole concludere
      * la fase di attacco.
+     * @author Federico
      */
     public boolean wants2Attack() {
         
-        Random randomGenerator = new Random();
+        /*Random randomGenerator = new Random();
         
-        return randomGenerator.nextBoolean(); 
+        return randomGenerator.nextBoolean();*/
+        return true;
     }
 }
