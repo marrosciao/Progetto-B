@@ -143,19 +143,32 @@ public class RisikoMap {
         }
 
     }
-
+    
+    
+    /**
+     * Ritorna il giocatore successivo nella lista dei players a quello che si passa;
+     * se il giocatore è l'ultimo della lista ritorna il primo.
+     * 
+     * @param players
+     * @param round
+     * @return Player
+     * @author Elisa
+     */
     private Player nextPlayer(List<Player> players, int round) {
 
         return players.get(round % (players.size()));
 
     }
 
-    public List<Country> getCountriesList() {
-        List<Country> countries = new ArrayList<>();
-        for (Map.Entry<Country, Player> entry : this.countryPlayer.entrySet()) {
-            countries.add(entry.getKey());
-        }
-        return countries;
+    /**
+     * Ritorna una lista con tutti i countries
+     * 
+     * 
+     * @return List
+     * @author Elisa
+     */
+    public List<Country> getCountriesList() {     
+        return new ArrayList<>(countryPlayer.keySet());
     }
 
     /**
@@ -183,18 +196,17 @@ public class RisikoMap {
             Collections.sort(myCountries);
 
             int bonus = (int) Math.floor(myCountries.size() / 3);
-
-            myCountries.get(0).addArmies(bonus);
-        }
-        /*
-        while (bonus != 0) {
-            int c = (int) Math.floor(Math.random() * myCountries.size());
-            myCountries.get(c).addArmies(1);
-
-            bonus--;
             
-        }*/
+            for(Country c:myCountries){
+                if(bonus!=0){
+                    c.addArmies(1);
+                    bonus--;
+                }
+            }
 
+            
+        }
+       
     }
 
     /**
