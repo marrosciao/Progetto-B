@@ -59,6 +59,9 @@ class Game {
     }
 
     public void playNextTurn() {
+        
+        winner = (map.checkIfWinner(activePlayer)) ? activePlayer : null;
+        
         // Setto come giocatoreAttivo il prossimo giocatore
         nextTurn();
 

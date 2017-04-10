@@ -1,7 +1,7 @@
 package risiko;
 
 
-public class Country {
+public class Country implements Comparable<Country>{
     
     private final String name;
     private int armies;
@@ -32,5 +32,10 @@ public class Country {
     
     public boolean isConquered(){
         return (armies<=0);
+    }
+
+    @Override
+    public int compareTo(Country o) {
+        return this.armies-o.getArmies();
     }
 }

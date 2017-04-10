@@ -70,9 +70,8 @@ class Player {
      */
     public boolean wants2Attack() {
         
-        /*Random randomGenerator = new Random();
+        Random randomGenerator = new Random();
         
-        return randomGenerator.nextBoolean();*/
-        return true;
+        return randomGenerator.nextBoolean();
     }
 }
