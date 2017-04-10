@@ -125,7 +125,7 @@ class Game {
      * @param player il giocatore di turno
      * @return array di 2 countries, country[0] atttaccante, [1] attaccato
      */
-    Country[] getFightingCountries(Player player) {
+    Country[] getFightingCountries(Player player){
         return map.getFightingCountries(player);
     }
 

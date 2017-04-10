@@ -70,8 +70,10 @@ class Player {
      */
     public boolean wants2Attack() {
         
+        double probability = 0.8;
         Random randomGenerator = new Random();
         
-        return randomGenerator.nextBoolean();
-    }
+        return randomGenerator.nextDouble()<probability;
+}    
+    
 }

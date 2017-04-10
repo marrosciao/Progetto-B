@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 public class RisikoMap {
 
     private final int DEFAULT_ARMIES = 3;
-    //private final String urlCountries = "files/territori.txt";
-    private final String urlCountries = "files/prova.txt";
+    private final String urlCountries = "files/territori.txt";
+    //private final String urlCountries = "files/prova.txt";
     private Map<Country, Player> countryPlayer;
     private Map<Country, List<Country>> countryNeighbors;
 
@@ -179,11 +179,13 @@ public class RisikoMap {
     void reinforce(Player player) {
 
         List<Country> myCountries = getMyCountries(player);
-        Collections.sort(myCountries);
+        if (!myCountries.isEmpty()) {
+            Collections.sort(myCountries);
 
-        int bonus = (int) Math.floor(myCountries.size() / 3);
+            int bonus = (int) Math.floor(myCountries.size() / 3);
 
-        myCountries.get(0).addArmies(bonus);
+            myCountries.get(0).addArmies(bonus);
+        }
         /*
         while (bonus != 0) {
             int c = (int) Math.floor(Math.random() * myCountries.size());
