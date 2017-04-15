@@ -20,6 +20,10 @@ public class RisikoMap {
     private Map<Country, Player> countryPlayer;
     private Map<Country, List<Country>> countryNeighbors;
 
+    public Map<Country, Player> getCountryPlayer() {
+        return countryPlayer;
+    }
+
     public RisikoMap() throws Exception {
 
         this.countryPlayer = new HashMap<>();
@@ -189,25 +193,25 @@ public class RisikoMap {
      * @param player il giocatore di turno
      * @author Elisa
      */
-    void reinforce(Player player) {
-
-        List<Country> myCountries = getMyCountries(player);
-        if (!myCountries.isEmpty()) {
-            Collections.sort(myCountries);
-
-            int bonus = (int) Math.floor(myCountries.size() / 3);
-            
-            for(Country c:myCountries){
-                if(bonus!=0){
-                    c.addArmies(1);
-                    bonus--;
-                }
-            }
-
-            
-        }
-       
-    }
+//    void reinforce(Player player) {
+//
+//        List<Country> myCountries = getMyCountries(player);
+//        if (!myCountries.isEmpty()) {
+//            Collections.sort(myCountries);
+//
+//            int bonus = (int) Math.floor(myCountries.size() / 3);
+//            
+//            for(Country c:myCountries){
+//                if(bonus!=0){
+//                    c.addArmies(1);
+//                    bonus--;
+//                }
+//            }
+//
+//            
+//        }
+//       
+//    }
 
     /**
      * Ritorna una lista dei territori del giocatore
@@ -259,27 +263,27 @@ public class RisikoMap {
      * quella attaccato
      * @author Alessandro
      */
-    public Country[] getFightingCountries(Player player) {
-        int attackIndex, defenseIndex;
-        Country[] selected = new Country[2];
-
-        List<Country> attack = this.getMyCountries(player);
-        Collections.shuffle(attack);
-        for (Country a : attack) {
-            List<Country> defense = this.getNeighbors(a);
-
-            Collections.shuffle(defense);
-
-            for (Country d : defense) {
-                selected[0] = a;
-                selected[1] = d;
-                if (verifyAttack(selected, player)) {
-                    return selected;
-                }
-            }
-        }
-        return null;
-    }
+//    public Country[] getFightingCountries(Player player) {
+//        int attackIndex, defenseIndex;
+//        Country[] selected = new Country[2];
+//
+//        List<Country> attack = this.getMyCountries(player);
+//        Collections.shuffle(attack);
+//        for (Country a : attack) {
+//            List<Country> defense = this.getNeighbors(a);
+//
+//            Collections.shuffle(defense);
+//
+//            for (Country d : defense) {
+//                selected[0] = a;
+//                selected[1] = d;
+//                if (verifyAttack(selected, player)) {
+//                    return selected;
+//                }
+//            }
+//        }
+//        return null;
+//    }
 
     /**
      * Controlla che l'attacco sia valido. return true se Country[0] è del

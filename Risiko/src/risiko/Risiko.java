@@ -12,11 +12,12 @@ public class Risiko {
 
     /**
      * @param args the command line arguments
+     * creare frame che contiene la gui e passare alla gui game
      */
     public static void main(String[] args) throws Exception {
 
         Game game = new Game(5);
-        game.play();
+        //game.play();
 
     }
 
