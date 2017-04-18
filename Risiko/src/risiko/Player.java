@@ -17,19 +17,7 @@ class Player {
 //        this.game = game;
 //    }
 //
-//    /**
-//     * BOH RAGA MEGA DUBBIO.
-//     * Demanda al gioco di scegliere il territorio attaccante e attaccato.
-//     * (non mi ricordo perché sia necessario fare questo giro: immaginando che
-//     * player.getFightingCountries() sia chiamato in game, il giocatore così
-//     * facendo chiede a game di scegliere le sue fightingCountries, e poi le
-//     * restituisce a game.... Non è forse meglio che giocatore invece di avere
-//     * game come attributo abbia map a cui chiede i suoi territori, scelga
-//     * secondo qualche criterio l'attaccante, richieda alla map i confinanti e
-//     * poi scelga l'attaccato o una cosa del genere?). 
-//     * @return un'array (length : 2) di country, in cui country[0] è l'attaccante e country[1]
-//     * l'attaccato
-//     */
+//   
 //    public Country[] chooseFightingCountries() {
 //       return game.getFightingCountries(this);      
 //    }
@@ -98,6 +86,10 @@ class Player {
 
     public void setBonusArmies(int bonusArmies) {
         this.bonusArmies = bonusArmies;
+    }
+    
+    public void decrementBonusArmies(int bonusArmies){
+        this.bonusArmies-=bonusArmies;
     }
     
 }

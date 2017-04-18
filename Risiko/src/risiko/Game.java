@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 import java.util.Random;
 
 class Game {
@@ -12,7 +13,8 @@ class Game {
     private List<Player> players;
     private Player activePlayer;
     private Player winner;
-    private int phase;
+    private Phase phase;
+    private AttackResult attackResult;
 
     public Game(int nrPlayers) throws Exception {
         this.players = new ArrayList<>();
@@ -42,7 +44,7 @@ class Game {
         activePlayer = players.get(randomIndex);
 
     }
-    
+
     //aggiungere nomi diversi per i giocatori
     private void buildPlayers(int nrPlayers) {
 
@@ -52,53 +54,139 @@ class Game {
     }
 
     /**
-     * controlla ed esegue l'attacco se questo è velido e fatto dal giocatore corrente
-     * @param countryAttack     territorio dal quale parte l'attacco
-     * @param countrydefense    territorio in difesa
-     * @param player            giocatore che vuole eseguire l'attacco
-     * @return                  se l'azione è stata eseguita 
+     * controlla ed esegue l'attacco se questo è velido e fatto dal giocatore
+     * corrente controlla (se attacco riuscito e conquista) che sia il vincitore
+     * sposta nrA armate nel territorio conquistato salva attacker e defender e
+     * le armate perse in un nuovo oggetto attackResult e i player se
+     * isConquered chiama hasLost
+     *
+     * @param countryAttack territorio dal quale parte l'attacco
+     * @param countrydefense territorio in difesa
+     * @param player giocatore che vuole eseguire l'attacco
+     * @return se l'azione è stata eseguita
+     * @author Andrea
      */
-    public boolean attack(Country countryAttack,Country countrydefense,Player player){
-        return false;
+    public void attack(Country countryAttack, Country countrydefense, int nrA, int nrD) {
+        //TODO
     }
-    
-    /**
-     * controlla e aggiunge le armate al territorio, queste vengono prese dal campo 
-     * bonusArmies del giocatore fino ad esaurimento
-     * @param player    giocatore che vuole eseguire azione
-     * @param nArmies   numero di armate da aggiungere
-     * @param country   territorio sul quale aggiungerle
-     * @return          
+
+    /*
+        ridà il risultato
+        @author Andrea
      */
-    public boolean reinforce(Player player,Country country,int nArmies) {
-        return false;
-    }
-    
-    /**
-     * passa il turno del giocatore se non c'è niente in sospeso (tipo assegnazione armate o altro)
-     * aggiorna active player
-     * @param player    il giocatore che vuole passare il turno
-     */   
-    public void passTurn(Player player){
-        
-    }
-    
-    /**
-     * restituisce lo stato del gioco da mostrare nell'interfaccia grafica
-     * @return 
-     */
-    public GameStatus getGameStatus(){
+    public AttackResult getAttackResult() {
+        //TODO
         return null;
     }
-    
+
+    /*
+        CONTROLLA SE IL DIFENSORE DEVE ESSERE ELIMINATO DAL GIOCO
+     */
+    private void hasLost(Player defenderPlayer) {
+        if (map.hasLost(defenderPlayer)) {
+            players.remove(defenderPlayer);
+        }
+    }
+
+    /**
+     * controlla e aggiunge le armate al territorio, queste vengono prese dal
+     * campo bonusArmies del giocatore fino ad esaurimento
+     *
+     * @param player giocatore che vuole eseguire azione
+     * @param nArmies numero di armate da aggiungere
+     * @param country territorio sul quale aggiungerle
+     * @return
+     */
+    public boolean reinforce(Country country, int nArmies) {
+        if (activePlayer.getBonusArmies() - nArmies >= 0) {
+            activePlayer.decrementBonusArmies(nArmies);
+            country.addArmies(nArmies);
+            return true;
+        }
+        return false;
+    }
+
+    /*
+        cambia la fase (controlla se sei in rifornimento che abbia messo tutti i bonus) se è l'ultima chiama passTurn
+        @author Carolina
+     */
+    public void nextPhase() {
+        //TODO
+    }
+
+    /**
+     * chiama la funzione map.computeBonusArmies passa il turno del giocatore se
+     * non c'è niente in sospeso (tipo assegnazione armate o altro) aggiorna
+     * active player e rimette la fase alla fase 0
+     *
+     * @param player il giocatore che vuole passare il turno
+     * @author Carolina
+     */
+    public void passTurn() {
+        //TODO
+    }
+
     /**
      * controlla se il giocatore ha vinto
+     *
+     * @author Carolina
      */
-    public void hasWon(Player player){
-        
+    public void hasWon(Player player) {
+        //TODO
     }
+
+    /*
+        crea funcioni che riprendono le cose fatte nella mappa controlAttacker, controlDefender, getMaxArmies
+     */
+    public boolean controlAttacker(Country country) {
+        return map.controlAttacker(country, activePlayer);
+    }
+
+    public boolean controlPlayer(Country country) {
+        return map.controlPlayer(country, activePlayer);
+    }
+
+    /**
+     * Controlla che il territorio non sia dell'active player e che sia un
+     * confinante dell'attacker
+     */
+    public boolean controlDefender(Country attacker, Country defender) {
+        return map.controlDefender(attacker, defender, activePlayer);
+    }
+
+    /*
+        Ridà il massimo numero di armate per lo spinner rispetto al tipo di country
+     */
+    public int getMaxArmies(Country country, boolean isAttacker) {
+        return map.getMaxArmies(country, isAttacker);
+    }
+
+    /*
+        Metodi per dare info
     
-    
+     */
+ /*
+        Ridà i contry per i combo
+     */
+    public Country[] getCountryList() {
+        return (Country[]) map.getCountriesList().toArray();
+    }
+
+    /*
+        ridà le info da metter nel text area
+     */
+    public Map<Country, Player> getCountryPlayer() {
+        return map.getCountryPlayer();
+    }
+
+    /*
+        ridà l'active player e la fase del gioco
+     @author Federico
+     */
+    public String getInfo() {
+        //TODO
+        return null;
+    }
 //    public void play() {
 //
 //        int counter = 0;
@@ -244,4 +332,5 @@ class Game {
 //    public RisikoMap getRisikoMap() {
 //        return this.map;
 //    }
+
 }

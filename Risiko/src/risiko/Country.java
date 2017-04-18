@@ -31,7 +31,7 @@ public class Country implements Comparable<Country>{
     }
     
     public boolean isConquered(){
-        return (armies<=0);
+        return (armies==0);
     }
 
     @Override

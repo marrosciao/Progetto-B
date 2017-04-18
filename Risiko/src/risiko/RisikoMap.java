@@ -1,3 +1,4 @@
+
 package risiko;
 
 import java.io.BufferedReader;
@@ -12,6 +13,11 @@ import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
+/**
+ * Dividere verify attack in modo da avere un controllo sull'attaccante, uno sul
+ * difensore (guarda gui) mettere metodo che mi ridà il massimo di armate con
+ * cui posso attacare o difendere Cambiamo country[] in attacker, defender
+ */
 public class RisikoMap {
 
     private final int DEFAULT_ARMIES = 3;
@@ -147,12 +153,11 @@ public class RisikoMap {
         }
 
     }
-    
-    
+
     /**
-     * Ritorna il giocatore successivo nella lista dei players a quello che si passa;
-     * se il giocatore è l'ultimo della lista ritorna il primo.
-     * 
+     * Ritorna il giocatore successivo nella lista dei players a quello che si
+     * passa; se il giocatore è l'ultimo della lista ritorna il primo.
+     *
      * @param players
      * @param round
      * @return Player
@@ -166,12 +171,12 @@ public class RisikoMap {
 
     /**
      * Ritorna una lista con tutti i countries
-     * 
-     * 
+     *
+     *
      * @return List
      * @author Elisa
      */
-    public List<Country> getCountriesList() {     
+    public List<Country> getCountriesList() {
         return new ArrayList<>(countryPlayer.keySet());
     }
 
@@ -193,25 +198,12 @@ public class RisikoMap {
      * @param player il giocatore di turno
      * @author Elisa
      */
-//    void reinforce(Player player) {
-//
-//        List<Country> myCountries = getMyCountries(player);
-//        if (!myCountries.isEmpty()) {
-//            Collections.sort(myCountries);
-//
-//            int bonus = (int) Math.floor(myCountries.size() / 3);
-//            
-//            for(Country c:myCountries){
-//                if(bonus!=0){
-//                    c.addArmies(1);
-//                    bonus--;
-//                }
-//            }
-//
-//            
-//        }
-//       
-//    }
+    void computeBonusArmies(Player player) {
+
+        int bonus = (int) Math.floor(getMyCountries(player).size() / 3);
+        player.setBonusArmies(bonus);
+
+    }
 
     /**
      * Ritorna una lista dei territori del giocatore
@@ -284,7 +276,6 @@ public class RisikoMap {
 //        }
 //        return null;
 //    }
-
     /**
      * Controlla che l'attacco sia valido. return true se Country[0] è del
      * giocatore di turno e ha di un'armata, Country[1] è di un altro giocatore,
@@ -294,13 +285,43 @@ public class RisikoMap {
      * @param player il giocatore di turno.
      * @author Alessandro
      */
-    public boolean verifyAttack(Country[] countries, Player player) {
+    /*public boolean verifyAttack(Country[] countries, Player player) {
         if (this.countryPlayer.get(countries[0]) != null && this.countryPlayer.get(countries[0]).equals(player) && countries[0].getArmies() > 1) {
-            if (this.countryPlayer.get(countries[1]) != null && !this.countryPlayer.get(countries[1]).equals(player) /*&&countries[1].getArmies() > 1*/) {
+            if (this.countryPlayer.get(countries[1]) != null && !this.countryPlayer.get(countries[1]).equals(player) ) {
                 return true;
             }
         }
         return false;
+    }*/
+ /*
+        Controlla che il territorio sia dell'active player e che si legale attaccare
+     */
+    public boolean controlAttacker(Country country, Player player) {
+        return this.countryPlayer.get(country).equals(player) && country.getArmies() > 1;
+
+    }
+    
+    public boolean controlPlayer(Country country, Player player) {
+        return this.countryPlayer.get(country).equals(player) ;
+
+    }
+
+    /**
+     * Controlla che il territorio non sia dell'active player e che sia un
+     * confinante dell'attacker
+     */
+    public boolean controlDefender(Country attacker, Country defender, Player player) {
+        return !this.countryPlayer.get(defender).equals(player) && this.getNeighbors(attacker).contains(defender);
+    }
+
+    /*
+        Ridà il massimo numero di armate per lo spinner rispetto al tipo di country
+     */
+    public int getMaxArmies(Country country, boolean isAttacker) {
+        if (isAttacker) {
+             return Math.min(3, country.getArmies()-1);
+        }
+        return Math.min(3, country.getArmies()); 
     }
 
     /**
@@ -336,7 +357,7 @@ public class RisikoMap {
      */
     public boolean checkIfWinner(Player player) {
 
-        List<Country> countryList = new ArrayList<>(countryPlayer.keySet()); //si potrebbe usare anche per il getCountryList?
+        List<Country> countryList = getCountriesList(); 
 
         return getMyCountries(player).containsAll(countryList);
     }
@@ -352,5 +373,13 @@ public class RisikoMap {
 
     public Map<Country, List<Country>> getCountryNeighbors() {
         return this.countryNeighbors;
+    }
+
+    /*
+        controlla se il difensore non ha più territori
+     */
+    public boolean hasLost(Player defenderPlayer) {
+
+        return getMyCountries(defenderPlayer).isEmpty();
     }
 }

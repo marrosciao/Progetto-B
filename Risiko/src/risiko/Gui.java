@@ -5,12 +5,16 @@
  */
 package risiko;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author alessandro
  */
-public class Gui extends javax.swing.JPanel {
+public class Gui extends JFrame {
+
     Game game;
+
     //sono da inserire i vari elementi grafici, gli eventi che richiamano game, l'aggiornamento dello stato del gioco
     //gli elementi che potrebbero servire sono :
     //2 combobox per selezionare attacco e difesa, 
@@ -19,13 +23,14 @@ public class Gui extends javax.swing.JPanel {
     //un bottone per passare il turno,
     //un label per il giocatore 
     //una textarea per le informazioni
-    
+    //Per aggiungere le armate bonus, clicchi su attacckerList finchè armateBonus del giocatore non arriva a zero.
     /**
      * Creates new form Gui
      */
     public Gui(Game game) {
         initComponents();
-        this.game=game;
+        init();
+        this.game = game;
     }
 
     /**
@@ -37,19 +42,190 @@ public class Gui extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        nextPhaseButton = new javax.swing.JButton();
+        attackerList = new javax.swing.JComboBox<>();
+        defenderList = new javax.swing.JComboBox<>();
+        attackButton = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
+
+        jLabel1.setText("jLabel1");
+
+        jLabel2.setText("Giocatore,fase");
+
+        nextPhaseButton.setText("nextPhase");
+        nextPhaseButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextPhaseButtonActionPerformed(evt);
+            }
+        });
+
+        attackerList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        attackerList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                attackerListActionPerformed(evt);
+            }
+        });
+
+        defenderList.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        defenderList.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                defenderListActionPerformed(evt);
+            }
+        });
+
+        attackButton.setText("attack");
+        attackButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                attackButtonActionPerformed(evt);
+            }
+        });
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jLabel3.setText("Risultato attacco");
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(35, 35, 35))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(43, 43, 43)
+                .addComponent(attackerList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(defenderList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(76, 76, 76))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(152, Short.MAX_VALUE)
+                .addComponent(attackButton)
+                .addGap(82, 82, 82)
+                .addComponent(nextPhaseButton)
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(attackerList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(defenderList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(83, 83, 83)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel3)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(nextPhaseButton)
+                    .addComponent(attackButton))
+                .addGap(22, 22, 22))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * é abilitato solo se giocatore non artificiale e se è nella fase attacco e
+     * ha finito quella di rinforzo
+     *
+     * @param evt
+     * @author Alessandro
+     */
+    private void nextPhaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextPhaseButtonActionPerformed
+        // if giocatore non artificiale e non rifornimento fa qualcosa
+        update();
+    }//GEN-LAST:event_nextPhaseButtonActionPerformed
 
+    /**
+     * Controlla la fase:
+     * -rinforzo:
+     * Chiama game.controlPlayer e se ok
+     * Chiama game.reinforce(country,1) dove country è scelto dalla lista, il
+     * controllo è fatto da reinforce
+     * -attacco:
+     * Chiama controlAttacker e deseleziona il country
+     * fa uscire un pop up di avvertimento
+     *
+     * @author Alessandro
+     */
+    private void attackerListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attackerListActionPerformed
+
+        //TODO
+        update();
+    }//GEN-LAST:event_attackerListActionPerformed
+
+    /**
+     * Controlla che ci siano i territori selezionati, lancia il dialog per
+     * prendere i numeri delle armate che saranno Jspinner controllati che ti
+     * fanno metter al massimo il numero dio armate ch epuoi mettere, prende i
+     * due territori, i numeri e chiama il metodo attack di game
+     *
+     * @param evt
+     * @author Alessandro
+     */
+    private void attackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attackButtonActionPerformed
+        // TODO 
+        update();
+    }//GEN-LAST:event_attackButtonActionPerformed
+
+    /**
+     *
+     * dopo aver controllato che il territorio non sia dell'activeplayer, sia
+     * confinate con l'attacker(se non lo è deselziono l'elemento selezionato e
+     * selziono quello vuoto di default)
+     *
+     * @author Alessandro
+     */
+    private void defenderListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defenderListActionPerformed
+        // TODO 
+        update();
+    }//GEN-LAST:event_defenderListActionPerformed
+
+    /**
+     * Riempie la textarea e il label del giocatore in cui ci sono nome
+     * giocatore, fase gioco, risultato ultima azione riempie l'altro label con
+     * attackresult
+     *
+     * @author Alessandro
+     *
+     */
+    private void update() {
+        //TODO
+    }
+
+    /**
+     * Riempie i combo box
+     *
+     * @author Alessandro
+     */
+    private void init() {
+        //TODO
+        update();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton attackButton;
+    private javax.swing.JComboBox<String> attackerList;
+    private javax.swing.JComboBox<String> defenderList;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JButton nextPhaseButton;
     // End of variables declaration//GEN-END:variables
 }
