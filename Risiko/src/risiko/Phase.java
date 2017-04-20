@@ -1,28 +1,28 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package risiko;
 
-/**
- *
- * @author Elisa
- */
-public enum Phase {
-    REINFORCE(0), FIGHT(1); //MOVE, PLAYCARDS, ecc
-    
-    private int value;
+import exceptions.LastPhaseException;
 
-       
-    private Phase(int value){
-        this.value=value;
+
+public enum Phase {
+    REINFORCE, FIGHT; //MOVE, PLAYCARDS, ecc
+
+    private final int value;
+
+    private Phase() {
+        this.value = ordinal();
     }
-    
-    public int getValue() {
-        return value;
+
+    /**
+     * Passa alla fase successiva del turno.
+     * @return la fase successiva.
+     * @throws LastPhaseException se è l'ultima fase del turno.
+     */
+    public Phase next() throws LastPhaseException {
+
+        try {
+            return Phase.values()[this.value+1];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            throw new LastPhaseException();
+        }
     }
-    
-    
-    
 }

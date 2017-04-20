@@ -1,11 +1,15 @@
 package risiko;
 
+import exceptions.LastPhaseException;
+import exceptions.PendingOperationsException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 class Game {
 
@@ -106,37 +110,83 @@ class Game {
         return false;
     }
 
-    /*
-        cambia la fase (controlla se sei in rifornimento che abbia messo tutti i bonus) se è l'ultima chiama passTurn
-        @author Carolina
+    /**
+     * Cambia la fase.
+     * - 1 Controlla che non ci siano operazioni in sospeso relative alla corrente
+     * fase del gioco:
+     *   > REINFORCE : activePlayer non deve avere bonus armies
+     * 
+     * - 2 SE è l'ultima fase chiama passTurn()
+     *
+     * @throws PendingOperationsException se non è possibile passare alla fase
+     * successiva perché ci sono operazioni in sospeso.
+     * @author Carolina
      */
-    public void nextPhase() {
-        //TODO
+    public void nextPhase() /*throws PendingOperationsException */{
+
+        // #1 (switch?)
+        if (phase == Phase.REINFORCE && activePlayer.getBonusArmies() != 0) 
+             //throw new PendingOperationsException();
+            return;  
+        
+        // #2
+        try {
+            this.phase = phase.next();
+        } catch (LastPhaseException ex) {
+            passTurn();
+        }
     }
 
     /**
-     * chiama la funzione map.computeBonusArmies passa il turno del giocatore se
-     * non c'è niente in sospeso (tipo assegnazione armate o altro) aggiorna
-     * active player e rimette la fase alla fase 0
-     *
-     * @param player il giocatore che vuole passare il turno
+     * Passa il turno al giocatore successivo.
+     * Ovvero 
+     * 1 - Setta come active player il successivo nel giro
+     * 2 - Setta come fase la prima del turno
+     * 3 - Assegna all'active player le armate bonus
+     * 
      * @author Carolina
      */
     public void passTurn() {
-        //TODO
+        
+        // #1
+        nextTurn();
+        
+        // #2
+        this.phase = Phase.values()[0];
+        
+        // #3
+        map.computeBonusArmies(activePlayer);
     }
 
     /**
-     * controlla se il giocatore ha vinto
+     * Setta come activePlayer il successivo nel giro.
      *
+     * @author Federico
+     */
+    private void nextTurn() {
+
+        ListIterator<Player> iter = players.listIterator(players.indexOf(activePlayer) + 1);
+
+        if (iter.hasNext()) {
+            activePlayer = iter.next();
+        } else {
+            activePlayer = players.get(0);
+        }
+    }
+
+    /**
+     * Controlla se il giocatore ha vinto
+     *
+     * @param player l'active player
+     * @return true se il giocatore ha vinto, false altrimenti
      * @author Carolina
      */
-    public void hasWon(Player player) {
-        //TODO
+    public boolean hasWon(Player player) {
+        return map.checkIfWinner(player);
     }
 
     /*
-        crea funcioni che riprendono le cose fatte nella mappa controlAttacker, controlDefender, getMaxArmies
+        crea funzioni che riprendono le cose fatte nella mappa controlAttacker, controlDefender, getMaxArmies
      */
     public boolean controlAttacker(Country country) {
         return map.controlAttacker(country, activePlayer);
