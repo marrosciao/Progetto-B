@@ -229,13 +229,13 @@ class Game {
         return map.getCountryPlayer();
     }
 
-    /*
-        ridà l'active player e la fase del gioco
-     @author Federico
+    /**
+     * Restituisce l'active player e la fase del gioco in cui ci si trova
+     * @author Federico
      */
     public String getInfo() {
-        //TODO
-        return null;
+      
+        return "Turno di: " + activePlayer.getName() + "\nFase corrente: " + phase.name();
     }
 //    public void play() {
 //
