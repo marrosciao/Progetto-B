@@ -38,4 +38,13 @@ public class Country implements Comparable<Country>{
     public int compareTo(Country o) {
         return this.armies-o.getArmies();
     }
+    
+    /**
+     * questo metodo seve per mostrare il nome nella combobox
+     * @return il nome del territorio
+     */
+    @Override
+    public String toString(){
+        return this.name;
+    }
 }

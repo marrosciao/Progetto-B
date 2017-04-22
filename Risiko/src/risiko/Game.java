@@ -219,7 +219,10 @@ class Game {
         Ridà i contry per i combo
      */
     public Country[] getCountryList() {
-        return (Country[]) map.getCountriesList().toArray();
+        Country[] cl = new Country[map.getCountriesList().size()]; 
+        map.getCountriesList().toArray(cl);
+        return cl;
+        //return (Country[]) map.getCountriesList().toArray();
     }
 
     /*
