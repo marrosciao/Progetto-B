@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package risiko;
 
 /**
@@ -11,20 +6,20 @@ package risiko;
  */
 public class AttackResult {
     
-    private Country attacker;
-    private Player attackerPlayer;
-    private Country defender;
-    private Player defenderPlayer;
-    private int armiesAttacker;
-    private int armiesDefender;
-    private int lostAttacker;
-    private int lostDefender;
+    private Country attackerCountry;
+    private Player  attackerPlayer;
+    private Country defenderCountry;
+    private Player  defenderPlayer;
+    private int     armiesAttacker;
+    private int     armiesDefender;
+    private int     lostAttacker;
+    private int     lostDefender;
     private boolean isConquered;
     
-    public AttackResult(Country attacker, Player attackerPlayer, Country defender, Player defenderPlayer, int armiesAttacker, int armiesDefender, int lostAttacker, int lostDefender, boolean isConquered) {
-        this.attacker = attacker;
+    public AttackResult(Country attackerCountry, Player attackerPlayer, Country defenderCountry, Player defenderPlayer, int armiesAttacker, int armiesDefender, int lostAttacker, int lostDefender, boolean isConquered) {
+        this.attackerCountry = attackerCountry;
         this.attackerPlayer = attackerPlayer;
-        this.defender = defender;
+        this.defenderCountry = defenderCountry;
         this.defenderPlayer = defenderPlayer;
         this.armiesAttacker = armiesAttacker;
         this.armiesDefender = armiesDefender;
@@ -34,7 +29,7 @@ public class AttackResult {
     }
 
     public Country getAttacker() {
-        return attacker;
+        return attackerCountry;
     }
 
     public Player getAttackerPlayer() {
@@ -42,7 +37,7 @@ public class AttackResult {
     }
 
     public Country getDefender() {
-        return defender;
+        return defenderCountry;
     }
 
     public Player getDefenderPlayer() {
@@ -75,16 +70,18 @@ public class AttackResult {
      * @author alessandro
      * @return 
      * 
-     * 
-     */
+     * ANDREA: ci ho scritto un prototipo di codice per controllare il metodo attack     */
     @Override
     public String toString(){
-        //TO DO
-        return null;
+        String str = "Territorio attaccante: "+attackerCountry.getName()+"\n"+
+                "Proprietario del territorio attaccante: "+attackerPlayer+"\n"+
+                "Numero armate attaccanti: "+armiesAttacker+"\n"+
+                "Numero armate attaccanti perse: "+lostAttacker+"\n"+
+                "Territorio difensore: "+defenderCountry.getName()+"\n"+
+                "Proprietario del territorio difensroere: "+defenderPlayer+"\n"+
+                "Numero armate in difesa: "+armiesDefender+"\n"+
+                "Numero armate in difesa perse: "+lostDefender+"\n"+
+                "Territorio in difesa è stato conquistato: "+isConquered+"\n"; 
+        return str;
     }
-    
-    
-    
-
-    
 }
