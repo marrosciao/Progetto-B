@@ -246,6 +246,7 @@ public class Gui extends JFrame {
                 execute.addActionListener((ActionEvent ae) -> {
                     game.attack((Country) attackerList.getSelectedItem(), (Country) defenderList.getSelectedItem(), (int) attackArmies.getValue(), (int) defenseArmies.getValue());
                     attackResult.setText(game.getAttackResult().toString());
+                    inputArmies.setVisible(false);
                 });
                 //JButton execute = new JButton("Esegui");
                 dialogPanel.add(attackText);
