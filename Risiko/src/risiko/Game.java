@@ -44,6 +44,7 @@ class Game {
         Random randomGenerator = new Random();
         int randomIndex = randomGenerator.nextInt(players.size());
         activePlayer = players.get(randomIndex);
+        this.phase = Phase.REINFORCE;
     }
 
     //Aggiungere nomi diversi per i giocatori
