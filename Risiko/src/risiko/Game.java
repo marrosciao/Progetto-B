@@ -27,6 +27,10 @@ class Game {
         init(nrPlayers);
     }
 
+    public Phase getPhase() {
+        return phase;
+    }
+
     /**
      * Inizializza il gioco. Ovvero chiama il metodo della mappa per
      * l'assegnazione iniziale dei territori ai giocatori -

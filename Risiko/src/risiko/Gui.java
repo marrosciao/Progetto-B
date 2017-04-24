@@ -68,7 +68,6 @@ public class Gui extends JFrame {
         attackButton = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         gameStatus = new javax.swing.JTextArea();
-        jLabel4 = new javax.swing.JLabel();
         infoCombAtt = new javax.swing.JLabel();
         infoCombDef = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -77,9 +76,11 @@ public class Gui extends JFrame {
         jLabel1.setText("jLabel1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(861, 788));
+        setMinimumSize(new java.awt.Dimension(1280, 720));
+        setPreferredSize(new java.awt.Dimension(1250, 725));
 
         playerPhase.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        playerPhase.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);
 
         nextPhaseButton.setText("nextPhase");
         nextPhaseButton.addActionListener(new java.awt.event.ActionListener() {
@@ -108,11 +109,9 @@ public class Gui extends JFrame {
         });
 
         gameStatus.setColumns(20);
+        gameStatus.setFont(new java.awt.Font("Monospaced", 0, 16)); // NOI18N
         gameStatus.setRows(5);
         jScrollPane1.setViewportView(gameStatus);
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel4.setText("Turno del giocatore");
 
         infoCombAtt.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         infoCombAtt.setText("seleziona un tuo territorio");
@@ -129,14 +128,10 @@ public class Gui extends JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(27, 27, 27)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(playerPhase, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(jLabel4)
-                        .addGap(40, 40, 40)
-                        .addComponent(playerPhase, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
@@ -150,22 +145,21 @@ public class Gui extends JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 40, Short.MAX_VALUE)
                                 .addComponent(attackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(nextPhaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jScrollPane2))))
-                .addContainerGap(31, Short.MAX_VALUE))
+                                .addComponent(nextPhaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(30, 30, 30)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(playerPhase, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(7, 7, 7)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 449, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(playerPhase, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 449, Short.MAX_VALUE))
+                .addGap(38, 38, 38)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(infoCombAtt)
                     .addComponent(attackerList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -180,7 +174,7 @@ public class Gui extends JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(attackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(nextPhaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(44, 44, 44))
+                .addGap(52, 52, 52))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -210,11 +204,22 @@ public class Gui extends JFrame {
      */
     private void attackerListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attackerListActionPerformed
         if (this.attackerList.getSelectedIndex() > -1) {
-            if (!game.controlAttacker((Country) this.attackerList.getSelectedItem())) {
-                this.attackerList.setSelectedIndex(-1);
+            if(game.getPhase().equals(Phase.REINFORCE)){
+                if (!game.controlAttacker((Country) this.attackerList.getSelectedItem())) {
+                    this.attackerList.setSelectedIndex(-1);
+                }else{
+                    if(!game.reinforce((Country) this.attackerList.getSelectedItem(), 1)){
+                        this.attackResult.setText("non ci sono più armate disponibili da assegnare");
+                        this.attackerList.setSelectedIndex(-1);
+                    }
+                }
+            }else if(game.getPhase().equals(Phase.FIGHT)){
+                if (!game.controlAttacker((Country) this.attackerList.getSelectedItem())) {
+                    this.attackerList.setSelectedIndex(-1);
+                }
             }
         }
-        //update();
+        update();
     }//GEN-LAST:event_attackerListActionPerformed
 
     /**
@@ -227,33 +232,37 @@ public class Gui extends JFrame {
      * @author Alessandro
      */
     private void attackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attackButtonActionPerformed
-        if (this.attackerList.getSelectedIndex() > -1 && this.defenderList.getSelectedIndex() > -1) {
-            JDialog inputArmies = new JDialog();
-            JPanel dialogPanel = new JPanel(new GridLayout(0,2));
-            JLabel attackText = new JLabel("n armate attaccco");
-            JLabel defenseText = new JLabel("n armate difesa");
-            SpinnerNumberModel attackModel = new SpinnerNumberModel(1, 1, game.getMaxArmies((Country)this.attackerList.getSelectedItem(), true), 1);
-            SpinnerNumberModel defenseModel = new SpinnerNumberModel(1, 1, game.getMaxArmies((Country)this.defenderList.getSelectedItem(), false), 1);
-            JSpinner attackArmies = new JSpinner(attackModel);
-            JSpinner defenseArmies = new JSpinner(defenseModel);
-            JButton execute = new JButton("Esegui");
-            execute.addActionListener((ActionEvent ae) -> {
-                game.attack((Country)attackerList.getSelectedItem(), (Country)defenderList.getSelectedItem(), (int)attackArmies.getValue(), (int)defenseArmies.getValue());
-                attackResult.setText(game.getAttackResult().toString());
-            });
-            //JButton execute = new JButton("Esegui");
-            dialogPanel.add(attackText);
-            dialogPanel.add(defenseText);
-            dialogPanel.add(attackArmies);
-            dialogPanel.add(defenseArmies);
-            dialogPanel.add(execute);
-            inputArmies.add(dialogPanel);
-            inputArmies.setModal(true);
-            inputArmies.setSize(600, 300);
-            inputArmies.setVisible(true);
+        if (game.getPhase().equals(Phase.FIGHT)) {
+            if (this.attackerList.getSelectedIndex() > -1 && this.defenderList.getSelectedIndex() > -1) {
+                JDialog inputArmies = new JDialog();
+                JPanel dialogPanel = new JPanel(new GridLayout(0, 2));
+                JLabel attackText = new JLabel("n armate attaccco");
+                JLabel defenseText = new JLabel("n armate difesa");
+                SpinnerNumberModel attackModel = new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) this.attackerList.getSelectedItem(), true), 1);
+                SpinnerNumberModel defenseModel = new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) this.defenderList.getSelectedItem(), false), 1);
+                JSpinner attackArmies = new JSpinner(attackModel);
+                JSpinner defenseArmies = new JSpinner(defenseModel);
+                JButton execute = new JButton("Esegui");
+                execute.addActionListener((ActionEvent ae) -> {
+                    game.attack((Country) attackerList.getSelectedItem(), (Country) defenderList.getSelectedItem(), (int) attackArmies.getValue(), (int) defenseArmies.getValue());
+                    attackResult.setText(game.getAttackResult().toString());
+                });
+                //JButton execute = new JButton("Esegui");
+                dialogPanel.add(attackText);
+                dialogPanel.add(defenseText);
+                dialogPanel.add(attackArmies);
+                dialogPanel.add(defenseArmies);
+                dialogPanel.add(execute);
+                inputArmies.add(dialogPanel);
+                inputArmies.setModal(true);
+                inputArmies.setSize(600, 300);
+                inputArmies.setVisible(true);
+            }
+
+            update();
+            this.attackerList.setSelectedIndex(-1);
+            this.defenderList.setSelectedIndex(-1);
         }
-        
-        update();
     }//GEN-LAST:event_attackButtonActionPerformed
 
     /**
@@ -265,10 +274,14 @@ public class Gui extends JFrame {
      * @author Alessandro
      */
     private void defenderListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defenderListActionPerformed
-        if (this.attackerList.getSelectedIndex() > -1) {
-            if (!game.controlDefender((Country)this.attackerList.getSelectedItem(),(Country) this.defenderList.getSelectedItem())) {
-                this.defenderList.setSelectedIndex(-1);
+        if (game.getPhase().equals(Phase.FIGHT)) {
+            if (this.attackerList.getSelectedIndex() > -1) {
+                if (!game.controlDefender((Country) this.attackerList.getSelectedItem(), (Country) this.defenderList.getSelectedItem())) {
+                    this.defenderList.setSelectedIndex(-1);
+                }
             }
+        }else{
+            this.defenderList.setSelectedIndex(-1);
         }
         //update();
     }//GEN-LAST:event_defenderListActionPerformed
@@ -282,15 +295,19 @@ public class Gui extends JFrame {
      *
      */
     private void update() {
-       this.gameStatus.setText("territorio\t\tproprietario\t\tnumero armate\n");
-       for(Entry<Country,Player> e : game.getCountryPlayer().entrySet()){
-           this.gameStatus.append(e.getKey().getName()+"\t\t"+e.getValue().getName()+"\t\t"+e.getKey().getArmies()+"\n");
-       }
-       
-       //this.playerPhase.setText(game.getInfo());
-       
-       //this.attackResult.setText(game.getAttackResult().toString());
-               
+        String format;
+        format = "%1$-30s %2$-15s %3$s";
+        this.gameStatus.setText(String.format(format, "territorio","proprietario","numero armate")+"\n");//"territorio\t\tproprietario\t\tnumero armate\n");
+        //format=""
+        for (Entry<Country, Player> e : game.getCountryPlayer().entrySet()) {
+            this.gameStatus.append(String.format(format, e.getKey().getName(),e.getValue().getName(),e.getKey().getArmies())+"\n");
+            //this.gameStatus.append(e.getKey().getName() + "\t\t" + e.getValue().getName() + "\t\t" + e.getKey().getArmies() + "\n");
+        }
+        this.gameStatus.setCaretPosition(0);
+        this.playerPhase.setText(game.getInfo());
+        if (game.getAttackResult() != null) {
+            this.attackResult.setText(game.getAttackResult().toString());
+        }
     }
 
     /**
@@ -307,8 +324,6 @@ public class Gui extends JFrame {
         update();
         this.attackerList.setSelectedIndex(-1);
         this.defenderList.setSelectedIndex(-1);
-        //game.nextPhase();
-        
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton attackButton;
@@ -319,7 +334,6 @@ public class Gui extends JFrame {
     private javax.swing.JLabel infoCombAtt;
     private javax.swing.JLabel infoCombDef;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton nextPhaseButton;
