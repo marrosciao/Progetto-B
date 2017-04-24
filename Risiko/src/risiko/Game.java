@@ -12,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 class Game {
-
     private RisikoMap map;
     private List<Player> players;
     private Player activePlayer;
@@ -39,57 +38,112 @@ class Game {
      * cui l'url del file dei territori fosse sbagliato.
      */
     private void init(int nrPlayers) throws Exception {
-
         buildPlayers(nrPlayers);
         map.assignCountriesToPlayers(players);
 
         Random randomGenerator = new Random();
         int randomIndex = randomGenerator.nextInt(players.size());
         activePlayer = players.get(randomIndex);
-
     }
 
-    //aggiungere nomi diversi per i giocatori
+    //Aggiungere nomi diversi per i giocatori
     private void buildPlayers(int nrPlayers) {
+        for (int i = 0; i < nrPlayers; i++) 
+            this.players.add(new Player("Giocatore-"+i));
+    }
 
-        for (int i = 0; i < nrPlayers; i++) {
-            this.players.add(new Player("nome"));
+    public void attack(Country countryAttacker,  Country countryDefender, int nrA, int nrD) {
+        Player  defenderPlayer = map.getPlayerFromCountry(countryDefender);
+        Player  attackerPlayer = map.getPlayerFromCountry(countryAttacker);
+        int     armiesLost[]   = fight(countryAttacker, countryDefender, nrA, nrD);
+        boolean conquered      = countryDefender.isConquered();
+        if (conquered) {
+            map.updateOnConquer(countryAttacker, countryDefender, nrA);
+            if (map.hasLost(defenderPlayer))     players.remove(defenderPlayer);
         }
+        attackResult=new AttackResult(countryAttacker, attackerPlayer,
+                                      countryDefender, defenderPlayer, nrA, nrD, 
+                                      armiesLost[0],   armiesLost[1], conquered);
     }
 
     /**
-     * controlla ed esegue l'attacco se questo è velido e fatto dal giocatore
-     * corrente controlla (se attacco riuscito e conquista) che sia il vincitore
-     * sposta nrA armate nel territorio conquistato salva attacker e defender e
-     * le armate perse in un nuovo oggetto attackResult e i player se
-     * isConquered chiama hasLost
-     *
-     * @param countryAttack territorio dal quale parte l'attacco
-     * @param countrydefense territorio in difesa
-     * @param player giocatore che vuole eseguire l'attacco
-     * @return se l'azione è stata eseguita
+     * Simula lo scontro tra due armate, eliminado quelle perse per ogni country.
+     * @param countries
+     * @param nrA
+     * @param nrD
+     * @return armiesLost necessario per istanziare attackResult nel metodo attack
      * @author Andrea
      */
-    public void attack(Country countryAttack, Country countrydefense, int nrA, int nrD) {
-        //TODO
+    private int[] fight(Country countryAttacker, Country countryDefender, int nrA, int nrD) {
+       	int armiesLost[] = computeArmiesLost(nrA, nrD);
+        countryAttacker.removeArmies(armiesLost[0]);
+        countryDefender.removeArmies(armiesLost[1]);
+        return armiesLost;
+    }
+    
+    /**
+     * Genera il numero di armate perse per giocatore durante uno scontro. 
+     * @return array da 2 elementi, il primo valore è il numero di armate perse
+     * dall'attaccante, il secondo il numero di armate perse dal difensore.
+     * @author Andrea
+     */
+    private int[] computeArmiesLost(int nrA, int nrD) {
+        int resultsDiceAttack[] = rollDice(nrA);
+        int resultsDiceDefens[] = rollDice(nrD);
+        int armiesLost[] = new int[2];
+        int min = (nrA > nrD) ? nrD : nrA;
+        for (int i = 0; i < min; i++) {
+            if (resultsDiceAttack[i] > resultsDiceDefens[i]) 
+                armiesLost[1]++;
+            else 
+                armiesLost[0]++;
+        }
+        return armiesLost;
     }
 
-    /*
-        ridà il risultato
-        @author Andrea
+    /**
+     * Lancia una serie di dadi e restituisce i loro valori in ordine decrescente!
+     * @param nrDice numero di dadi da tirare
+     * @return un array[nrDadi]con i risultati del lancio in ordine decrescente!
+     * @author Andrea
+     */
+    private int[] rollDice(int nrDice) {
+        int dices[] = new int[nrDice];
+        int tmp;
+        for (int i = 0; i < nrDice; i++)
+            dices[i] = rollDice();
+        Arrays.sort(dices);            
+        if (nrDice > 1) {
+            tmp = dices[0];
+            dices[0] = dices[nrDice - 1];
+            dices[nrDice - 1] = tmp;
+        }
+        return dices;
+    }
+    
+    /**
+     * Lancia il dado e ritorna il suo risultato.
+     * @return un numero random da 1 a 6
+     * @author Andrea
+     */
+    private int rollDice() {
+        return (int) (Math.random() * 6) + 1;
+    }    
+
+    /**
+     *  ridà il risultato
+     *  @author Andrea
      */
     public AttackResult getAttackResult() {
-        //TODO
-        return null;
+        return attackResult;
     }
 
-    /*
-        CONTROLLA SE IL DIFENSORE DEVE ESSERE ELIMINATO DAL GIOCO
+    /**
+     *  Controlla se il difensore deve essere eliminato dal gioco.
      */
     private void hasLost(Player defenderPlayer) {
-        if (map.hasLost(defenderPlayer)) {
+        if (map.hasLost(defenderPlayer))
             players.remove(defenderPlayer);
-        }
     }
 
     /**
@@ -164,7 +218,6 @@ class Game {
      * @author Federico
      */
     private void nextTurn() {
-
         ListIterator<Player> iter = players.listIterator(players.indexOf(activePlayer) + 1);
 
         if (iter.hasNext()) {
@@ -173,6 +226,8 @@ class Game {
             activePlayer = players.get(0);
         }
     }
+   
+    //  M E T O D I   R I P R E S I   D A   M A P
 
     /**
      * Controlla se il giocatore ha vinto
@@ -185,38 +240,41 @@ class Game {
         return map.checkIfWinner(player);
     }
 
-    /*
-        crea funzioni che riprendono le cose fatte nella mappa controlAttacker, controlDefender, getMaxArmies
+    /**
+     *  Controlla che country sia dell'activePlayer e che si legale attaccare.
      */
     public boolean controlAttacker(Country country) {
         return map.controlAttacker(country, activePlayer);
     }
-
+    
+    /**
+     * Controlla che country sia di player.
+     */
     public boolean controlPlayer(Country country) {
         return map.controlPlayer(country, activePlayer);
     }
 
     /**
      * Controlla che il territorio non sia dell'active player e che sia un
-     * confinante dell'attacker
+     * confinante dell'attacker.
      */
     public boolean controlDefender(Country attacker, Country defender) {
         return map.controlDefender(attacker, defender, activePlayer);
     }
 
-    /*
-        Ridà il massimo numero di armate per lo spinner rispetto al tipo di country
+    /**
+     *  Ridà il max numero di armate per lo spinner rispetto al tipo di country.
      */
     public int getMaxArmies(Country country, boolean isAttacker) {
         return map.getMaxArmies(country, isAttacker);
     }
 
-    /*
-        Metodi per dare info
     
-     */
- /*
-        Ridà i contry per i combo
+    //  M E T O D I   P E R   D A R E   I N F O
+     
+    /**
+     *  Ridà i country per i combo.
+     *  ANDREA: genera un'eccezione
      */
     public Country[] getCountryList() {
         Country[] cl = new Country[map.getCountriesList().size()]; 
@@ -225,8 +283,8 @@ class Game {
         //return (Country[]) map.getCountriesList().toArray();
     }
 
-    /*
-        ridà le info da metter nel text area
+    /**
+     *  ridà le info da metter nel text area.
      */
     public Map<Country, Player> getCountryPlayer() {
         return map.getCountryPlayer();
@@ -385,5 +443,4 @@ class Game {
 //    public RisikoMap getRisikoMap() {
 //        return this.map;
 //    }
-
 }

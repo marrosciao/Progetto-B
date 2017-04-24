@@ -199,10 +199,8 @@ public class RisikoMap {
      * @author Elisa
      */
     void computeBonusArmies(Player player) {
-
         int bonus = (int) Math.floor(getMyCountries(player).size() / 3);
         player.setBonusArmies(bonus);
-
     }
 
     /**
@@ -338,12 +336,11 @@ public class RisikoMap {
      * spostate dal territorio attaccante a quello appena conquistato.
      * @author Alessandro
      */
-    public void updateOnConquer(Country[] countries, int armies) {
-        Player attack = this.countryPlayer.get(countries[0]);
-        this.countryPlayer.put(countries[1], attack);
-        countries[0].removeArmies(armies);
-        countries[1].setArmies(armies);
-
+    public void updateOnConquer(Country countryAttacker,  Country countryDefender, int armies) {
+        Player attack = this.countryPlayer.get(countryAttacker);
+        this.countryPlayer.put(countryDefender, attack);
+        countryAttacker.removeArmies(armies);
+        countryDefender.setArmies(armies);
     }
 
     /**
@@ -376,10 +373,9 @@ public class RisikoMap {
     }
 
     /*
-        controlla se il difensore non ha più territori
+     *   controlla se il difensore non ha più territori
      */
     public boolean hasLost(Player defenderPlayer) {
-
         return getMyCountries(defenderPlayer).isEmpty();
     }
 }
