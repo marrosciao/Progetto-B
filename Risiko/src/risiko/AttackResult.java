@@ -74,11 +74,11 @@ public class AttackResult {
     @Override
     public String toString(){
         String str = "Territorio attaccante: "+attackerCountry.getName()+"\n"+
-                "Proprietario del territorio attaccante: "+attackerPlayer+"\n"+
+                "Proprietario del territorio attaccante: "+attackerPlayer.getName()+"\n"+
                 "Numero armate attaccanti: "+armiesAttacker+"\n"+
                 "Numero armate attaccanti perse: "+lostAttacker+"\n"+
                 "Territorio difensore: "+defenderCountry.getName()+"\n"+
-                "Proprietario del territorio difensroere: "+defenderPlayer+"\n"+
+                "Proprietario del territorio difensroere: "+defenderPlayer.getName()+"\n"+
                 "Numero armate in difesa: "+armiesDefender+"\n"+
                 "Numero armate in difesa perse: "+lostDefender+"\n"+
                 "Territorio in difesa è stato conquistato: "+isConquered+"\n"; 
