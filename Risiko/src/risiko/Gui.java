@@ -5,9 +5,23 @@
  */
 package risiko;
 
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTextField;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 
 /**
  *
@@ -54,12 +68,17 @@ public class Gui extends JFrame {
         attackButton = new javax.swing.JButton();
         attackResult = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        gameStatus = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
         infoCombAtt = new javax.swing.JLabel();
         infoCombDef = new javax.swing.JLabel();
 
         jLabel1.setText("jLabel1");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(861, 788));
+
+        playerPhase.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         nextPhaseButton.setText("nextPhase");
         nextPhaseButton.addActionListener(new java.awt.event.ActionListener() {
@@ -87,14 +106,19 @@ public class Gui extends JFrame {
             }
         });
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        attackResult.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
+        gameStatus.setColumns(20);
+        gameStatus.setRows(5);
+        jScrollPane1.setViewportView(gameStatus);
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel4.setText("Turno del giocatore");
 
+        infoCombAtt.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         infoCombAtt.setText("seleziona un tuo territorio");
 
+        infoCombDef.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         infoCombDef.setText("seleziona territorio avversario");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -118,7 +142,7 @@ public class Gui extends JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(infoCombAtt, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(infoCombDef, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE))
+                                    .addComponent(infoCombDef, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(defenderList, 0, 141, Short.MAX_VALUE)
@@ -167,7 +191,7 @@ public class Gui extends JFrame {
      * @author Alessandro
      */
     private void nextPhaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextPhaseButtonActionPerformed
-        // if giocatore non artificiale e non rifornimento fa qualcosa
+        game.nextPhase();
         update();
     }//GEN-LAST:event_nextPhaseButtonActionPerformed
 
@@ -184,9 +208,11 @@ public class Gui extends JFrame {
      * @author Alessandro
      */
     private void attackerListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attackerListActionPerformed
-
-        //TODO
-        update();
+        if(!game.controlAttacker((Country)this.attackerList.getSelectedItem())){
+            this.attackerList.setSelectedIndex(-1);
+        }
+            
+        //update();
     }//GEN-LAST:event_attackerListActionPerformed
 
     /**
@@ -199,7 +225,30 @@ public class Gui extends JFrame {
      * @author Alessandro
      */
     private void attackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attackButtonActionPerformed
-        // TODO 
+        if (this.attackerList.getSelectedIndex() > -1 && this.defenderList.getSelectedIndex() > -1) {
+            JDialog inputArmies = new JDialog();
+            JPanel dialogPanel = new JPanel(new GridLayout(0,2));
+            JLabel attackText = new JLabel("n armate attaccco");
+            JLabel defenseText = new JLabel("n armate difesa");
+            SpinnerNumberModel attackModel = new SpinnerNumberModel(1.0, 1.0, game.getMaxArmies((Country)this.attackerList.getSelectedItem(), true), 1.0);
+            SpinnerNumberModel defenseModel = new SpinnerNumberModel(1.0, 1.0, game.getMaxArmies((Country)this.defenderList.getSelectedItem(), false), 1.0);
+            JSpinner attackArmies = new JSpinner(attackModel);
+            JSpinner defenseArmies = new JSpinner(defenseModel);
+            JButton execute = new JButton("Esegui");
+            execute.addActionListener((ActionEvent ae) -> {
+                game.attack((Country)attackerList.getSelectedItem(), (Country)defenderList.getSelectedItem(), (int)attackArmies.getValue(), (int)defenseArmies.getValue());
+            });
+            //JButton execute = new JButton("Esegui");
+            dialogPanel.add(attackText);
+            dialogPanel.add(defenseText);
+            dialogPanel.add(attackArmies);
+            dialogPanel.add(defenseArmies);
+            dialogPanel.add(execute);
+            inputArmies.add(dialogPanel);
+            inputArmies.setModal(true);
+            inputArmies.setVisible(true);
+        }
+        
         update();
     }//GEN-LAST:event_attackButtonActionPerformed
 
@@ -212,8 +261,12 @@ public class Gui extends JFrame {
      * @author Alessandro
      */
     private void defenderListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defenderListActionPerformed
-        // TODO 
-        update();
+        if (this.attackerList.getSelectedIndex() > -1) {
+            if (!game.controlDefender((Country)this.attackerList.getSelectedItem(),(Country) this.defenderList.getSelectedItem())) {
+                this.defenderList.setSelectedIndex(-1);
+            }
+        }
+        //update();
     }//GEN-LAST:event_defenderListActionPerformed
 
     /**
@@ -225,33 +278,42 @@ public class Gui extends JFrame {
      *
      */
     private void update() {
-        //TODO
+       this.gameStatus.setText("territorio\t\tproprietario\t\tnumero armate\n");
+       for(Entry<Country,Player> e : game.getCountryPlayer().entrySet()){
+           this.gameStatus.append(e.getKey().getName()+"\t\t"+e.getValue().getName()+"\t\t"+e.getKey().getArmies()+"\n");
+       }
+       
+       this.playerPhase.setText(game.getInfo());
+       
+       this.attackResult.setText(game.getAttackResult().toString());
+               
     }
 
     /**
-     * Riempie i combo box
+     * Riempie le combo box
      *
      * @author Alessandro
      */
     private void init() {
-        Country[] d =game.getCountryList();
-        int k=0;
-        DefaultComboBoxModel cm = new DefaultComboBoxModel(game.getCountryList());
-        this.attackerList.setModel(cm);
-        this.defenderList.setModel(cm);
-        update();
+        //crea il modello con la lista dei territori
+        DefaultComboBoxModel cma = new DefaultComboBoxModel(game.getCountryList());
+        DefaultComboBoxModel cmd = new DefaultComboBoxModel(game.getCountryList());
+        this.attackerList.setModel(cma);
+        this.defenderList.setModel(cmd);
+        //game.nextPhase();
+        //update();
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton attackButton;
     private javax.swing.JLabel attackResult;
     private javax.swing.JComboBox<String> attackerList;
     private javax.swing.JComboBox<String> defenderList;
+    private javax.swing.JTextArea gameStatus;
     private javax.swing.JLabel infoCombAtt;
     private javax.swing.JLabel infoCombDef;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JButton nextPhaseButton;
     private javax.swing.JLabel playerPhase;
     // End of variables declaration//GEN-END:variables
