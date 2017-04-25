@@ -17,6 +17,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -235,20 +236,33 @@ public class Gui extends JFrame {
         if (game.getPhase().equals(Phase.FIGHT)) {
             if (this.attackerList.getSelectedIndex() > -1 && this.defenderList.getSelectedIndex() > -1) {
                 JDialog inputArmies = new JDialog();
-                JPanel dialogPanel = new JPanel(new GridLayout(0, 2));
-                JLabel attackText = new JLabel("n armate attaccco");
-                JLabel defenseText = new JLabel("n armate difesa");
-                SpinnerNumberModel attackModel = new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) this.attackerList.getSelectedItem(), true), 1);
-                SpinnerNumberModel defenseModel = new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) this.defenderList.getSelectedItem(), false), 1);
-                JSpinner attackArmies = new JSpinner(attackModel);
+                JPanel  dialogPanel = new JPanel(new GridLayout(0, 2));
+                JLabel  attackText  = new JLabel("n armate attaccco");
+                JLabel  defenseText = new JLabel("n armate difesa");
+                SpinnerNumberModel attackModel  = new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) attackerList.getSelectedItem(), true),  1);
+                SpinnerNumberModel defenseModel = new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) defenderList.getSelectedItem(), false), 1);
+                JSpinner attackArmies  = new JSpinner(attackModel);
                 JSpinner defenseArmies = new JSpinner(defenseModel);
                 JButton execute = new JButton("Esegui");
-                execute.addActionListener((ActionEvent ae) -> {
-                    game.attack((Country) attackerList.getSelectedItem(), (Country) defenderList.getSelectedItem(), (int) attackArmies.getValue(), (int) defenseArmies.getValue());
-                    attackResult.setText(game.getAttackResult().toString());
-                    inputArmies.setVisible(false);
+                    execute.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent ae) {
+                        game.attack((Country) attackerList.getSelectedItem(), (Country) defenderList.getSelectedItem(), (int) attackArmies.getValue(), (int) defenseArmies.getValue());
+                        attackResult.setText(game.getAttackResult().toString());
+                        update();
+                        Country attackerCountry = (Country) attackerList.getSelectedItem();
+                        if(attackerCountry.getArmies()<2){
+                            JOptionPane.showMessageDialog(null, "Non è più possibile effettuare attacchi da questo territorio.");
+                            inputArmies.dispose();
+                        }
+                        if(game.getAttackResult().isIsConquered()){ 
+                            JOptionPane.showMessageDialog(null, "Complimenti, il terriotorio in difesa è stato conquistato.");
+                            inputArmies.dispose();   
+                        }
+                        attackArmies.setModel( new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) attackerList.getSelectedItem(), true), 1));
+                        defenseArmies.setModel(new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) defenderList.getSelectedItem(), true), 1));                   
+                    }
                 });
-                //JButton execute = new JButton("Esegui");
                 dialogPanel.add(attackText);
                 dialogPanel.add(defenseText);
                 dialogPanel.add(attackArmies);
@@ -259,8 +273,6 @@ public class Gui extends JFrame {
                 inputArmies.setSize(600, 300);
                 inputArmies.setVisible(true);
             }
-
-            update();
             this.attackerList.setSelectedIndex(-1);
             this.defenderList.setSelectedIndex(-1);
         }
