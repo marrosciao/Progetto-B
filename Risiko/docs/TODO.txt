@@ -7,10 +7,19 @@ Elementi:
 -bottone moreInfo che fa vedere tutte le info scritte(textarea di area)
 
 Aggiugere gli attributi:
-- String countryAttacker, countryDefender	
+- String countryAttacker, countryDefender(inizialmente null)	
 - Map<Color,String> colorNameCountry (associa un colore alla stringa del country) 
 
 In init() 
 - creiamo game 
 - creiamo colorNameCountry leggendo da un file
-- leggiamo file dei labels (file in cui c'è nome dello stato e posizione relativa rispetto alla mappa)
+- (leggiamo file dei labels (file in cui c'è nome dello stato e posizione relativa rispetto alla mappa))
+
+In update()
+- (cambiare valore dei label che sono sulla mappa)
+
+Modificare metodi di gui, game e map: mettere in ingresso nameCountry al posto di Country
+
+actionListener del mouse: prende il colore, dal colore trova il nameCountry, usa i metodi già fatti
+
+In risikoMap salvare HashMap StringCountry che crei quando leggi il primo file
