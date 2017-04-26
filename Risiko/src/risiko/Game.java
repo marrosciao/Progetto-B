@@ -48,6 +48,7 @@ class Game {
         Random randomGenerator = new Random();
         int randomIndex = randomGenerator.nextInt(players.size());
         activePlayer = players.get(randomIndex);
+        map.computeBonusArmies(activePlayer);
         this.phase = Phase.REINFORCE;
     }
 

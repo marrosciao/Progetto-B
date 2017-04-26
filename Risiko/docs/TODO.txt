@@ -1,0 +1,16 @@
+GUI
+Elementi:
+-figura mappa + labels con numero armies, colorati del colore del giocatore
+-textarea info(attacante scelto,difensore scelto, attackresult,...)
+-bottone attack(visibile solo nella fase di attacco)
+-bottone nextPhase, che prende il nome nextTurn quando siamo in attacco
+-bottone moreInfo che fa vedere tutte le info scritte(textarea di area)
+
+Aggiugere gli attributi:
+- String countryAttacker, countryDefender	
+- Map<Color,String> colorNameCountry (associa un colore alla stringa del country) 
+
+In init() 
+- creiamo game 
+- creiamo colorNameCountry leggendo da un file
+- leggiamo file dei labels (file in cui c'è nome dello stato e posizione relativa rispetto alla mappa)

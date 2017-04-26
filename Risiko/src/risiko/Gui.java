@@ -43,13 +43,14 @@ public class Gui extends JFrame {
     //Per aggiungere le armate bonus, clicchi su attacckerList finchè armateBonus del giocatore non arriva a zero.
     /**
      * Creates new form Gui
+     *
      * @param game istanza del gioco
      */
     public Gui(Game game) {
         initComponents();
         this.game = game;
         init();
-        
+
     }
 
     /**
@@ -192,29 +193,23 @@ public class Gui extends JFrame {
     }//GEN-LAST:event_nextPhaseButtonActionPerformed
 
     /**
-     * Controlla la fase:
-     * -rinforzo:
-     * Chiama game.controlPlayer e se ok
-     * Chiama game.reinforce(country,1) dove country è scelto dalla lista, il
-     * controllo è fatto da reinforce
-     * -attacco:
-     * Chiama controlAttacker e deseleziona il country
-     * fa uscire un pop up di avvertimento
+     * Controlla la fase: -rinforzo: Chiama game.controlPlayer e se ok Chiama
+     * game.reinforce(country,1) dove country è scelto dalla lista, il controllo
+     * è fatto da reinforce -attacco: Chiama controlAttacker e deseleziona il
+     * country fa uscire un pop up di avvertimento
      *
      * @author Alessandro
      */
     private void attackerListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attackerListActionPerformed
         if (this.attackerList.getSelectedIndex() > -1) {
-            if(game.getPhase().equals(Phase.REINFORCE)){
+            if (game.getPhase().equals(Phase.REINFORCE)) {
                 if (!game.controlAttacker((Country) this.attackerList.getSelectedItem())) {
                     this.attackerList.setSelectedIndex(-1);
-                }else{
-                    if(!game.reinforce((Country) this.attackerList.getSelectedItem(), 1)){
-                        this.attackResult.setText("non ci sono più armate disponibili da assegnare");
-                        this.attackerList.setSelectedIndex(-1);
-                    }
+                } else if (!game.reinforce((Country) this.attackerList.getSelectedItem(), 1)) {
+                    this.attackResult.setText("non ci sono più armate disponibili da assegnare");
+                    this.attackerList.setSelectedIndex(-1);
                 }
-            }else if(game.getPhase().equals(Phase.FIGHT)){
+            } else if (game.getPhase().equals(Phase.FIGHT)) {
                 if (!game.controlAttacker((Country) this.attackerList.getSelectedItem())) {
                     this.attackerList.setSelectedIndex(-1);
                 }
@@ -236,31 +231,33 @@ public class Gui extends JFrame {
         if (game.getPhase().equals(Phase.FIGHT)) {
             if (this.attackerList.getSelectedIndex() > -1 && this.defenderList.getSelectedIndex() > -1) {
                 JDialog inputArmies = new JDialog();
-                JPanel  dialogPanel = new JPanel(new GridLayout(0, 2));
-                JLabel  attackText  = new JLabel("n armate attaccco");
-                JLabel  defenseText = new JLabel("n armate difesa");
-                SpinnerNumberModel attackModel  = new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) attackerList.getSelectedItem(), true),  1);
+                JPanel dialogPanel = new JPanel(new GridLayout(0, 2));
+                JLabel attackText = new JLabel("n armate attaccco");
+                JLabel defenseText = new JLabel("n armate difesa");
+                SpinnerNumberModel attackModel = new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) attackerList.getSelectedItem(), true), 1);
                 SpinnerNumberModel defenseModel = new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) defenderList.getSelectedItem(), false), 1);
-                JSpinner attackArmies  = new JSpinner(attackModel);
+                JSpinner attackArmies = new JSpinner(attackModel);
                 JSpinner defenseArmies = new JSpinner(defenseModel);
                 JButton execute = new JButton("Esegui");
-                    execute.addActionListener(new ActionListener() {
+                execute.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent ae) {
                         game.attack((Country) attackerList.getSelectedItem(), (Country) defenderList.getSelectedItem(), (int) attackArmies.getValue(), (int) defenseArmies.getValue());
                         attackResult.setText(game.getAttackResult().toString());
                         update();
                         Country attackerCountry = (Country) attackerList.getSelectedItem();
-                        if(attackerCountry.getArmies()<2){
+                        if (game.getAttackResult().isIsConquered()) {
+                            JOptionPane.showMessageDialog(null, "Complimenti, il terriotorio in difesa è stato conquistato.");
+                            inputArmies.dispose();
+                            return;
+                        }
+                        if (attackerCountry.getArmies() < 2) {
                             JOptionPane.showMessageDialog(null, "Non è più possibile effettuare attacchi da questo territorio.");
                             inputArmies.dispose();
+                            return;
                         }
-                        if(game.getAttackResult().isIsConquered()){ 
-                            JOptionPane.showMessageDialog(null, "Complimenti, il terriotorio in difesa è stato conquistato.");
-                            inputArmies.dispose();   
-                        }
-                        attackArmies.setModel( new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) attackerList.getSelectedItem(), true), 1));
-                        defenseArmies.setModel(new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) defenderList.getSelectedItem(), true), 1));                   
+                        attackArmies.setModel(new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) attackerList.getSelectedItem(), true), 1));
+                        defenseArmies.setModel(new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) defenderList.getSelectedItem(), false), 1));
                     }
                 });
                 dialogPanel.add(attackText);
@@ -293,7 +290,7 @@ public class Gui extends JFrame {
                     this.defenderList.setSelectedIndex(-1);
                 }
             }
-        }else{
+        } else {
             this.defenderList.setSelectedIndex(-1);
         }
         //update();
@@ -310,10 +307,10 @@ public class Gui extends JFrame {
     private void update() {
         String format;
         format = "%1$-30s %2$-15s %3$s";
-        this.gameStatus.setText(String.format(format, "territorio","proprietario","numero armate")+"\n");//"territorio\t\tproprietario\t\tnumero armate\n");
+        this.gameStatus.setText(String.format(format, "territorio", "proprietario", "numero armate") + "\n");//"territorio\t\tproprietario\t\tnumero armate\n");
         //format=""
         for (Entry<Country, Player> e : game.getCountryPlayer().entrySet()) {
-            this.gameStatus.append(String.format(format, e.getKey().getName(),e.getValue().getName(),e.getKey().getArmies())+"\n");
+            this.gameStatus.append(String.format(format, e.getKey().getName(), e.getValue().getName(), e.getKey().getArmies()) + "\n");
             //this.gameStatus.append(e.getKey().getName() + "\t\t" + e.getValue().getName() + "\t\t" + e.getKey().getArmies() + "\n");
         }
         this.gameStatus.setCaretPosition(0);
