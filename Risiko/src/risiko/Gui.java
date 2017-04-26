@@ -203,14 +203,14 @@ public class Gui extends JFrame {
     private void attackerListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attackerListActionPerformed
         if (this.attackerList.getSelectedIndex() > -1) {
             if (game.getPhase().equals(Phase.REINFORCE)) {
-                if (!game.controlAttacker((Country) this.attackerList.getSelectedItem())) {
+                if (!game.controlAttacker((String) this.attackerList.getSelectedItem())) {
                     this.attackerList.setSelectedIndex(-1);
-                } else if (!game.reinforce((Country) this.attackerList.getSelectedItem(), 1)) {
+                } else if (!game.reinforce((String) this.attackerList.getSelectedItem(), 1)) {
                     this.attackResult.setText("non ci sono più armate disponibili da assegnare");
                     this.attackerList.setSelectedIndex(-1);
                 }
             } else if (game.getPhase().equals(Phase.FIGHT)) {
-                if (!game.controlAttacker((Country) this.attackerList.getSelectedItem())) {
+                if (!game.controlAttacker((String) this.attackerList.getSelectedItem())) {
                     this.attackerList.setSelectedIndex(-1);
                 }
             }
@@ -234,30 +234,30 @@ public class Gui extends JFrame {
                 JPanel dialogPanel = new JPanel(new GridLayout(0, 2));
                 JLabel attackText = new JLabel("n armate attaccco");
                 JLabel defenseText = new JLabel("n armate difesa");
-                SpinnerNumberModel attackModel = new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) attackerList.getSelectedItem(), true), 1);
-                SpinnerNumberModel defenseModel = new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) defenderList.getSelectedItem(), false), 1);
+                SpinnerNumberModel attackModel = new SpinnerNumberModel(1, 1, game.getMaxArmies((String) attackerList.getSelectedItem(), true), 1);
+                SpinnerNumberModel defenseModel = new SpinnerNumberModel(1, 1, game.getMaxArmies((String) defenderList.getSelectedItem(), false), 1);
                 JSpinner attackArmies = new JSpinner(attackModel);
                 JSpinner defenseArmies = new JSpinner(defenseModel);
                 JButton execute = new JButton("Esegui");
                 execute.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent ae) {
-                        game.attack((Country) attackerList.getSelectedItem(), (Country) defenderList.getSelectedItem(), (int) attackArmies.getValue(), (int) defenseArmies.getValue());
+                        game.attack((String) attackerList.getSelectedItem(), (String) defenderList.getSelectedItem(), (int) attackArmies.getValue(), (int) defenseArmies.getValue());
                         attackResult.setText(game.getAttackResult().toString());
                         update();
-                        Country attackerCountry = (Country) attackerList.getSelectedItem();
+                        String attackerCountry = (String) attackerList.getSelectedItem();
                         if (game.getAttackResult().isIsConquered()) {
                             JOptionPane.showMessageDialog(null, "Complimenti, il terriotorio in difesa è stato conquistato.");
                             inputArmies.dispose();
                             return;
                         }
-                        if (attackerCountry.getArmies() < 2) {
+                        if (!game.canAttackFromCountry(attackerCountry)) {
                             JOptionPane.showMessageDialog(null, "Non è più possibile effettuare attacchi da questo territorio.");
                             inputArmies.dispose();
                             return;
                         }
-                        attackArmies.setModel(new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) attackerList.getSelectedItem(), true), 1));
-                        defenseArmies.setModel(new SpinnerNumberModel(1, 1, game.getMaxArmies((Country) defenderList.getSelectedItem(), false), 1));
+                        attackArmies.setModel(new SpinnerNumberModel(1, 1, game.getMaxArmies((String) attackerList.getSelectedItem(), true), 1));
+                        defenseArmies.setModel(new SpinnerNumberModel(1, 1, game.getMaxArmies((String) defenderList.getSelectedItem(), false), 1));
                     }
                 });
                 dialogPanel.add(attackText);
@@ -286,7 +286,7 @@ public class Gui extends JFrame {
     private void defenderListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defenderListActionPerformed
         if (game.getPhase().equals(Phase.FIGHT)) {
             if (this.attackerList.getSelectedIndex() > -1) {
-                if (!game.controlDefender((Country) this.attackerList.getSelectedItem(), (Country) this.defenderList.getSelectedItem())) {
+                if (!game.controlDefender((String) this.attackerList.getSelectedItem(), (String) this.defenderList.getSelectedItem())) {
                     this.defenderList.setSelectedIndex(-1);
                 }
             }
@@ -327,8 +327,8 @@ public class Gui extends JFrame {
      */
     private void init() {
         //crea il modello con la lista dei territori
-        DefaultComboBoxModel cma = new DefaultComboBoxModel(game.getCountryList());
-        DefaultComboBoxModel cmd = new DefaultComboBoxModel(game.getCountryList());
+        DefaultComboBoxModel cma = new DefaultComboBoxModel(game.getCountryNameList());
+        DefaultComboBoxModel cmd = new DefaultComboBoxModel(game.getCountryNameList());
         this.attackerList.setModel(cma);
         this.defenderList.setModel(cmd);
         update();

@@ -58,17 +58,18 @@ class Game {
             this.players.add(new Player("Giocatore-"+i));
     }
 
-    public void attack(Country countryAttacker,  Country countryDefender, int nrA, int nrD) {
-        Player  defenderPlayer = map.getPlayerFromCountry(countryDefender);
-        Player  attackerPlayer = map.getPlayerFromCountry(countryAttacker);
-        int     armiesLost[]   = fight(countryAttacker, countryDefender, nrA, nrD);
-        boolean conquered      = countryDefender.isConquered();
+    public void attack(String countryAttackerName,  String countryDefenderName, int nrA, int nrD) {
+        
+        Player  defenderPlayer = map.getPlayerFromCountryName(countryDefenderName);
+        Player  attackerPlayer = map.getPlayerFromCountryName(countryAttackerName);
+        int     armiesLost[]   = fight(countryAttackerName, countryDefenderName, nrA, nrD);
+        boolean conquered      = map.isConquered(countryDefenderName);
         if (conquered) {
-            map.updateOnConquer(countryAttacker, countryDefender, nrA);
+            map.updateOnConquer(countryAttackerName, countryDefenderName, nrA);
             if (map.hasLost(defenderPlayer))     players.remove(defenderPlayer);
         }
-        attackResult=new AttackResult(countryAttacker, attackerPlayer,
-                                      countryDefender, defenderPlayer, nrA, nrD, 
+        attackResult=new AttackResult(attackerPlayer,
+                                      defenderPlayer, nrA, nrD, 
                                       armiesLost[0],   armiesLost[1], conquered);
     }
 
@@ -80,10 +81,10 @@ class Game {
      * @return armiesLost necessario per istanziare attackResult nel metodo attack
      * @author Andrea
      */
-    private int[] fight(Country countryAttacker, Country countryDefender, int nrA, int nrD) {
+    private int[] fight(String countryAttackerName, String countryDefenderName, int nrA, int nrD) {
        	int armiesLost[] = computeArmiesLost(nrA, nrD);
-        countryAttacker.removeArmies(armiesLost[0]);
-        countryDefender.removeArmies(armiesLost[1]);
+        map.removeArmies(countryAttackerName, armiesLost[0]);
+        map.removeArmies(countryDefenderName, armiesLost[1]);
         return armiesLost;
     }
     
@@ -161,10 +162,10 @@ class Game {
      * @param country territorio sul quale aggiungerle
      * @return
      */
-    public boolean reinforce(Country country, int nArmies) {
+    public boolean reinforce(String countryName, int nArmies) {
         if (activePlayer.getBonusArmies() - nArmies >= 0) {
             activePlayer.decrementBonusArmies(nArmies);
-            country.addArmies(nArmies);
+            map.addArmies(countryName, nArmies);
             return true;
         }
         return false;
@@ -249,8 +250,8 @@ class Game {
     /**
      *  Controlla che country sia dell'activePlayer e che si legale attaccare.
      */
-    public boolean controlAttacker(Country country) {
-        return map.controlAttacker(country, activePlayer);
+    public boolean controlAttacker(String countryName) {
+        return map.controlAttacker(countryName, activePlayer);
     }
     
     /**
@@ -264,15 +265,15 @@ class Game {
      * Controlla che il territorio non sia dell'active player e che sia un
      * confinante dell'attacker.
      */
-    public boolean controlDefender(Country attacker, Country defender) {
+    public boolean controlDefender(String attacker, String defender) {
         return map.controlDefender(attacker, defender, activePlayer);
     }
 
     /**
      *  Ridà il max numero di armate per lo spinner rispetto al tipo di country.
      */
-    public int getMaxArmies(Country country, boolean isAttacker) {
-        return map.getMaxArmies(country, isAttacker);
+    public int getMaxArmies(String countryName, boolean isAttacker) {
+        return map.getMaxArmies(countryName, isAttacker);
     }
 
     
@@ -287,6 +288,19 @@ class Game {
         map.getCountriesList().toArray(cl);
         return cl;
         //return (Country[]) map.getCountriesList().toArray();
+    }
+    
+    // TMP
+    public String[] getCountryNameList(){
+        Country[] countries = getCountryList();
+        String[] names = new String[countries.length];
+        
+        for(int i =0; i< countries.length; i++){
+            names[i]=countries[i].getName();
+        }
+        
+        return names;
+        
     }
 
     /**
@@ -449,4 +463,8 @@ class Game {
 //    public RisikoMap getRisikoMap() {
 //        return this.map;
 //    }
+
+    boolean canAttackFromCountry(String attackerCountry) {
+        return map.canAttackFromCountry(attackerCountry);
+    }
 }
