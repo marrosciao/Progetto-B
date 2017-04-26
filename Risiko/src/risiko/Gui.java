@@ -215,7 +215,7 @@ public class Gui extends JFrame {
                 }
             }
         }
-        update();
+        update();;
     }//GEN-LAST:event_attackerListActionPerformed
 
     /**
