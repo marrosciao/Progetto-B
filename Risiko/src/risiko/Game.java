@@ -7,24 +7,31 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Observable;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Game {
+public class Game extends Observable {
+    
+    private Country attackerCountry;
+    private Country defenderCountry;
+    private String attackerCountryName;
+    private String defenderCountryName;
     private RisikoMap map;
     private List<Player> players;
     private Player activePlayer;
     private Player winner;
     private Phase phase;
     private AttackResult attackResult;
-
+    
     public Game(int nrPlayers) throws Exception {
         this.players = new ArrayList<>();
         this.activePlayer = null;
         this.winner = null;
         this.map = new RisikoMap();
         init(nrPlayers);
+        
     }
 
     public Phase getPhase() {
@@ -162,13 +169,13 @@ public class Game {
      * @param country territorio sul quale aggiungerle
      * @return
      */
-    public boolean reinforce(String countryName, int nArmies) {
-        if (activePlayer.getBonusArmies() - nArmies >= 0) {
+    public void reinforce(String countryName, int nArmies) {
+        if (activePlayer.getBonusArmies() - nArmies >= 0) { //cancellare if in futuro
             activePlayer.decrementBonusArmies(nArmies);
             map.addArmies(countryName, nArmies);
-            return true;
+            
+            //notify(); passa alla gui la string country e quante armate bonus ha ancora
         }
-        return false;
     }
     
     public boolean canReinforce(String countryName, int nArmies){
@@ -268,8 +275,9 @@ public class Game {
      * Controlla che il territorio non sia dell'active player e che sia un
      * confinante dell'attacker.
      */
-    public boolean controlDefender(String attacker, String defender) {
-        return map.controlDefender(attacker, defender, activePlayer);
+    public boolean controlDefender(String defender) {
+        
+        return map.controlDefender(attackerCountry.getName(), defender, activePlayer);
     }
 
     /**
@@ -324,4 +332,29 @@ public class Game {
     boolean canAttackFromCountry(String attackerCountry) {
         return map.canAttackFromCountry(attackerCountry);
     }
+
+    public String getAttackerCountryName() {
+        return (attackerCountry==null) ? null : attackerCountry.getName();
+    }
+
+    public void setAttackerCountry(String attackerCountryName) {
+        this.attackerCountry = map.getCountryByName(attackerCountryName);
+        // notify
+    }
+
+    public String getDefenderCountryName() {
+        return (defenderCountry == null) ? null : defenderCountry.getName();
+    }
+
+    public void setDefenderCountry(String defenderCountryName) {
+        this.defenderCountry = map.getCountryByName(defenderCountryName);
+        // notify
+    }
+    
+    public void resetFightingCountries (){
+        this.defenderCountry = null;
+        this.attackerCountry = null;
+    }
+    
+    
 }

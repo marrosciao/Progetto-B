@@ -13,17 +13,23 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Scanner;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import risiko.Country;
 import risiko.Phase;
 import risiko.Game;
+import risiko.Player;
 
 /**
  *
  * @author andrea
  */
-public class GUI extends javax.swing.JFrame {
+public class GUI extends JFrame implements Observer{
 
     private Game game;
     private final Map<Color, String>  colorCountryNameMap;
@@ -31,11 +37,11 @@ public class GUI extends javax.swing.JFrame {
     public GUI() throws Exception {
         initComponents();
         game = new Game(2);
-        colorCountryNameMap=readColorTextMap("src/risiko/color.txt");
+        colorCountryNameMap=readColorTextMap("src/gui/color.txt");
         LabelMapListener labelMapListener = new LabelMapListener(convertToBufferedImage(labelMap), colorCountryNameMap, game);
         labelMap.addMouseListener(labelMapListener);
         labelMap.addMouseMotionListener(labelMapListener);
-        
+        labelPlayerPhase.setText(game.getInfo());
     }
     
     private void update() {
@@ -137,7 +143,15 @@ public class GUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonMoreInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonMoreInfoActionPerformed
-        // TODO add your handling code here:
+        String format = "%1$-30s %2$-15s %3$s";
+        String info;
+        info=String.format(format, "territorio", "proprietario", "numero armate") + "\n";//"territorio\t\tproprietario\t\tnumero armate\n");
+        //format=""
+        for (Map.Entry<Country, Player> e : game.getCountryPlayer().entrySet()) {
+            info+=String.format(format, e.getKey().getName(), e.getValue().getName(), e.getKey().getArmies()) + "\n";
+            //this.gameStatus.append(e.getKey().getName() + "\t\t" + e.getValue().getName() + "\t\t" + e.getKey().getArmies() + "\n");
+        }
+        JOptionPane.showMessageDialog(null,info);
     }//GEN-LAST:event_buttonMoreInfoActionPerformed
 
     private void buttonNextPhaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNextPhaseActionPerformed
@@ -199,4 +213,9 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JLabel labelPlayerPhase;
     private javax.swing.JTextArea textAreaInfo;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Observable o, Object arg) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

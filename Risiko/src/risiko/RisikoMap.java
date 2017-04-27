@@ -21,8 +21,8 @@ import java.util.stream.Collectors;
 public class RisikoMap {
 
     private final int DEFAULT_ARMIES = 3;
-    private final String urlCountries = "files/territori.txt";
-    //private final String urlCountries = "files/prova.txt";
+    //private final String urlCountries = "files/territori.txt";
+    private final String urlCountries = "files/prova.txt";
     private Map<Country, Player> countryPlayer;
     private Map<Country, List<Country>> countryNeighbors;
     private Map<String, Country> nameCountry;
@@ -305,7 +305,7 @@ public class RisikoMap {
 
     }
     
-    private Country getCountryByName (String name){
+    public Country getCountryByName (String name){
         return this.nameCountry.get(name);
     }
     

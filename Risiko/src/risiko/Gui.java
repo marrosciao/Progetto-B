@@ -6,6 +6,8 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -27,19 +29,9 @@ import risiko.Player;
  *
  * @author alessandro
  */
-public class Gui extends JFrame {
-
+public class Gui extends JFrame implements Observer{
     Game game;
 
-    //sono da inserire i vari elementi grafici, gli eventi che richiamano game, l'aggiornamento dello stato del gioco
-    //gli elementi che potrebbero servire sono :
-    //2 combobox per selezionare attacco e difesa, 
-    //1 bottone per attaccare, 
-    //un textfield o combobox per il numero di armate,
-    //un bottone per passare il turno,
-    //un label per il giocatore 
-    //una textarea per le informazioni
-    //Per aggiungere le armate bonus, clicchi su attacckerList finchè armateBonus del giocatore non arriva a zero.
     /**
      * Creates new form Gui
      
@@ -202,7 +194,7 @@ public class Gui extends JFrame {
             if (game.getPhase().equals(Phase.REINFORCE)) {
                 if (!game.controlAttacker((String) this.attackerList.getSelectedItem())) {
                     this.attackerList.setSelectedIndex(-1);
-                } else if (!game.reinforce((String) this.attackerList.getSelectedItem(), 1)) {
+                } else if (!true/*game.reinforce((String) this.attackerList.getSelectedItem(), 1)*/) {
                     this.attackResult.setText("non ci sono più armate disponibili da assegnare");
                     this.attackerList.setSelectedIndex(-1);
                 }
@@ -283,7 +275,7 @@ public class Gui extends JFrame {
     private void defenderListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_defenderListActionPerformed
         if (game.getPhase().equals(Phase.FIGHT)) {
             if (this.attackerList.getSelectedIndex() > -1) {
-                if (!game.controlDefender((String) this.attackerList.getSelectedItem(), (String) this.defenderList.getSelectedItem())) {
+                if (!game.controlDefender((String) this.defenderList.getSelectedItem())) {
                     this.defenderList.setSelectedIndex(-1);
                 }
             }
@@ -346,4 +338,9 @@ public class Gui extends JFrame {
     private javax.swing.JButton nextPhaseButton;
     private javax.swing.JLabel playerPhase;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void update(Observable o, Object arg) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

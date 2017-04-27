@@ -20,8 +20,6 @@ import risiko.Game;
 public class LabelMapListener extends MouseInputAdapter {
 
     private Game game;
-    private String attackerCountryName;
-    private String defenderCountryName;
     private final BufferedImage bufferedImage;
     private final Map<Color, String> ColorNameCountry;
 
@@ -33,9 +31,34 @@ public class LabelMapListener extends MouseInputAdapter {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        String Country = getCountryFromClick(e);
-        if (Country != null) {
-            JOptionPane.showMessageDialog(null, Country);
+        String countryName = getCountryFromClick(e);
+
+        if (countryName == null) {
+            game.resetFightingCountries();
+            return;
+        }
+        switch (game.getPhase()) {
+            case REINFORCE:
+                if (game.controlAttacker(countryName) && game.canReinforce(countryName, 1)) {
+                    //Ho ancora bonus armies e sono su un mio territorio
+                    game.reinforce(countryName, 1);
+                    //reinforce chiama notify(), la gui si aggiorna
+                } 
+                break;              
+            case FIGHT:
+                if(game.getAttackerCountryName()==null && game.controlAttacker(countryName)){
+                    //Devo scegliere l'attaccante, sono su un mio territorio da cui posso attaccare
+                    game.setAttackerCountry(countryName);
+                    break;   
+                }
+                if(game.getAttackerCountryName()!=null && game.controlDefender(countryName) ){
+                    //Devo scegliere il difensore, sono su un territorio confinante attaccabile
+                    game.setDefenderCountry(countryName);
+                    break;
+                }
+                //Sono su un territorio non valido per attaccare nè per difendere
+                game.resetFightingCountries();
+                break;          
         }
         // se ultimo reinforce metti nella textArea
     }
@@ -45,32 +68,32 @@ public class LabelMapListener extends MouseInputAdapter {
         String countryName = getCountryFromClick(e);
 
         if (countryName == null) {
+            // Non sono su alcun territorio
             e.getComponent().setCursor(Cursor.getDefaultCursor());
             return;
         }
-        
         switch (game.getPhase()) {
             case REINFORCE:
                 if (game.controlAttacker(countryName) && game.canReinforce(countryName, 1)) {
+                    //Ho ancora bonus armies e sono su un mio territorio
                     e.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 } else {
+                    //Non ho più bonusArmies oppure non sono sul mio territorio
                     e.getComponent().setCursor(Cursor.getDefaultCursor());
                 }
-
-                break;
-                
+                break;              
             case FIGHT:
-                
-                if(attackerCountryName==null && game.controlAttacker(countryName)){
-
+                if(game.getAttackerCountryName()==null && game.controlAttacker(countryName)){
+                    //Devo scegliere l'attaccante, sono su un mio territorio da cui posso attaccare
                     e.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                     break;   
                 }
-                if(attackerCountryName!=null && game.controlDefender(attackerCountryName, countryName) ){
-                    
+                if(game.getAttackerCountryName()!=null && game.controlDefender(countryName) ){
+                    //Devo scegliere il difensore, sono su un territorio confinante attaccabile
                     e.getComponent().setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                     break;
                 }
+                //Sono su un territorio non valido per attaccare nè per difendere
                 e.getComponent().setCursor(Cursor.getDefaultCursor());
                 break;          
         }
