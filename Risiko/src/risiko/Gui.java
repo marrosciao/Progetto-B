@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package risiko;
 
 import java.awt.GridLayout;
@@ -23,6 +18,10 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import risiko.Country;
+import risiko.Game;
+import risiko.Phase;
+import risiko.Player;
 
 /**
  *
@@ -43,14 +42,13 @@ public class Gui extends JFrame {
     //Per aggiungere le armate bonus, clicchi su attacckerList finchè armateBonus del giocatore non arriva a zero.
     /**
      * Creates new form Gui
-     *
+     
      * @param game istanza del gioco
      */
     public Gui(Game game) {
         initComponents();
         this.game = game;
         init();
-
     }
 
     /**
@@ -79,7 +77,6 @@ public class Gui extends JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1280, 720));
-        setPreferredSize(new java.awt.Dimension(1250, 725));
 
         playerPhase.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         playerPhase.setVerticalAlignment(javax.swing.SwingConstants.BOTTOM);

@@ -1,5 +1,6 @@
 package risiko;
 
+import gui.GUI;
 import exceptions.LastPhaseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,10 +18,8 @@ public class Risiko {
      */
     public static void main(String[] args) throws Exception {
 
-        Game game = new Game(5);
-        Gui interfaccia = new Gui(game);
+        GUI interfaccia = new GUI();
         interfaccia.setVisible(true);
-        //game.play();
     }
 
 }

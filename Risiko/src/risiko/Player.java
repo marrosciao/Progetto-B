@@ -2,7 +2,7 @@ package risiko;
 
 import java.util.Random;
 
-class Player {
+public class Player {
     private String name;
     private int bonusArmies;
     //altri attributi carte e obiettivi
