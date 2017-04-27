@@ -1,4 +1,3 @@
-
 package risiko;
 
 import java.io.BufferedReader;
@@ -190,10 +189,7 @@ public class RisikoMap {
     public Player getPlayerFromCountry(Country country) {
         return countryPlayer.get(country);
     }
-    
-    public Player getPlayerFromCountryName (String countryName){
-        return countryPlayer.get(getCountryByName(countryName));
-    }
+
 
     /**
      * Esegue la fase di rinforzo di inizio turno. Nr armate bonus =
@@ -299,18 +295,14 @@ public class RisikoMap {
  /*
         Controlla che il territorio sia dell'active player e che si legale attaccare
      */
-    public boolean controlAttacker(String countryName, Player player) {
-        Country country = getCountryByName(countryName);
+    public boolean controlAttacker(Country country, Player player) {
         return this.countryPlayer.get(country).equals(player) && country.getArmies() > 1;
 
     }
-    
-    public Country getCountryByName (String name){
-        return this.nameCountry.get(name);
-    }
-    
+
+
     public boolean controlPlayer(Country country, Player player) {
-        return this.countryPlayer.get(country).equals(player) ;
+        return this.countryPlayer.get(country).equals(player);
 
     }
 
@@ -318,25 +310,20 @@ public class RisikoMap {
      * Controlla che il territorio non sia dell'active player e che sia un
      * confinante dell'attacker
      */
-    public boolean controlDefender(String attackerName, String defenderName, Player player) {
-        
-        Country attacker = getCountryByName(attackerName);
-        Country defender = getCountryByName(defenderName);
-        
+    public boolean controlDefender(Country attacker, Country defender, Player player) {
+
         return !this.countryPlayer.get(defender).equals(player) && this.getNeighbors(attacker).contains(defender);
     }
 
     /*
         Ridà il massimo numero di armate per lo spinner rispetto al tipo di country
      */
-    public int getMaxArmies(String countryName, boolean isAttacker) {
-        
-        Country country = getCountryByName(countryName);
-        
+    public int getMaxArmies(Country country, boolean isAttacker) {
+
         if (isAttacker) {
-             return Math.min(3, country.getArmies()-1);
+            return Math.min(3, country.getArmies() - 1);
         }
-        return Math.min(3, country.getArmies()); 
+        return Math.min(3, country.getArmies());
     }
 
     /**
@@ -353,15 +340,13 @@ public class RisikoMap {
      * spostate dal territorio attaccante a quello appena conquistato.
      * @author Alessandro
      */
-    public void updateOnConquer(String countryAttackerName,  String countryDefenderName, int armies) {
-        
-        Country countryAttacker = getCountryByName(countryAttackerName);
-        Country countryDefender = getCountryByName(countryDefenderName);
-        
-        Player attack = this.countryPlayer.get(countryAttacker);
-        this.countryPlayer.put(countryDefender, attack);
-        countryAttacker.removeArmies(armies);
-        countryDefender.setArmies(armies);
+    public void updateOnConquer(Country attackerCountry, Country defenderCountry, int armies) {
+
+
+        Player attack = this.countryPlayer.get(attackerCountry);
+        this.countryPlayer.put(defenderCountry, attack);
+        attackerCountry.removeArmies(armies);
+        defenderCountry.setArmies(armies);
     }
 
     /**
@@ -375,7 +360,7 @@ public class RisikoMap {
      */
     public boolean checkIfWinner(Player player) {
 
-        List<Country> countryList = getCountriesList(); 
+        List<Country> countryList = getCountriesList();
 
         return getMyCountries(player).containsAll(countryList);
     }
@@ -385,8 +370,8 @@ public class RisikoMap {
      *
      * @return true se non ha armate
      */
-    public boolean isConquered(String countryName) {
-        return getCountryByName(countryName).isConquered();
+    public boolean isConquered(Country country) {
+        return country.isConquered();
     }
 
     public Map<Country, List<Country>> getCountryNeighbors() {
@@ -400,15 +385,19 @@ public class RisikoMap {
         return getMyCountries(defenderPlayer).isEmpty();
     }
 
-    public void addArmies(String countryName, int nArmies) {
-       getCountryByName(countryName).addArmies(nArmies);
+    public void addArmies(Country country, int nArmies) {
+        country.addArmies(nArmies);
     }
 
-    public void removeArmies(String countryName, int nArmies) {
-        getCountryByName(countryName).removeArmies(nArmies);
+    public void removeArmies(Country country, int nArmies) {
+        country.removeArmies(nArmies);
     }
 
-    boolean canAttackFromCountry(String countryName) {
-        return getCountryByName(countryName).getArmies()>1;
+    public boolean canAttackFromCountry(Country country) {
+        return country.getArmies() > 1;
+    }
+
+    public Country getCountryByName(String countryName) {
+        return nameCountry.get(countryName);
     }
 }

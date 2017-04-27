@@ -36,7 +36,7 @@ public class GUI extends JFrame implements Observer{
 
     public GUI() throws Exception {
         initComponents();
-        game = new Game(2);
+        game = new Game(2/*, this*/);
         colorCountryNameMap=readColorTextMap("src/gui/color.txt");
         LabelMapListener labelMapListener = new LabelMapListener(convertToBufferedImage(labelMap), colorCountryNameMap, game);
         labelMap.addMouseListener(labelMapListener);

@@ -231,7 +231,7 @@ public class Gui extends JFrame implements Observer{
                 execute.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent ae) {
-                        game.attack((String) attackerList.getSelectedItem(), (String) defenderList.getSelectedItem(), (int) attackArmies.getValue(), (int) defenseArmies.getValue());
+                        game.attack(/*(String) attackerList.getSelectedItem(), (String) defenderList.getSelectedItem(),*/ (int) attackArmies.getValue(), (int) defenseArmies.getValue());
                         attackResult.setText(game.getAttackResult().toString());
                         update();
                         String attackerCountry = (String) attackerList.getSelectedItem();
