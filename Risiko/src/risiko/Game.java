@@ -170,7 +170,10 @@ public class Game {
         }
         return false;
     }
-
+    
+    public boolean canReinforce(String countryName, int nArmies){
+        return activePlayer.getBonusArmies() - nArmies >= 0;
+    }
     /**
      * Cambia la fase.
      * - 1 Controlla che non ci siano operazioni in sospeso relative alla corrente

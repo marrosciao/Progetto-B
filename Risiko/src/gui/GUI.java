@@ -1,10 +1,13 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package gui;
 
 import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -13,16 +16,16 @@ import java.util.Map;
 import java.util.Scanner;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
-import gui.LabelMapListener;
 import risiko.Phase;
-import risiko.Phase;
-import risiko.*;
+import risiko.Game;
 
 /**
+ *
  * @author andrea
  */
 public class GUI extends javax.swing.JFrame {
-    private Game    game;
+
+    private Game game;
     private final Map<Color, String>  colorCountryNameMap;
 
     public GUI() throws Exception {
@@ -36,13 +39,13 @@ public class GUI extends javax.swing.JFrame {
     }
     
     private void update() {
-        this.playerPhaseLabel.setText(game.getInfo());
+        this.labelPlayerPhase.setText(game.getInfo());
         if (game.getPhase().equals(Phase.REINFORCE)){           
         }
         if (game.getAttackResult() != null) 
-            this.infoTextArea.setText(game.getAttackResult().toString());
+            this.textAreaInfo.setText(game.getAttackResult().toString());
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -52,40 +55,43 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         labelMap = new javax.swing.JLabel();
-        playerPhaseLabel = new javax.swing.JLabel();
-        nextPhaseButton = new javax.swing.JButton();
-        attackButton = new javax.swing.JButton();
-        moreInfoButton = new javax.swing.JButton();
-
-        jLabel1.setText("jLabel1");
-
-        jLabel2.setText("jLabel2");
+        labelPlayerPhase = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        textAreaInfo = new javax.swing.JTextArea();
+        buttonAttack = new javax.swing.JButton();
+        buttonNextPhase = new javax.swing.JButton();
+        buttonMoreInfo = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        labelMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/risiko/cartina_italia.png"))); // NOI18N
+        labelMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/cartina_italia.png"))); // NOI18N
 
-        nextPhaseButton.setText("nextPhase");
-        nextPhaseButton.addActionListener(new java.awt.event.ActionListener() {
+        labelPlayerPhase.setBackground(new java.awt.Color(225, 207, 218));
+        labelPlayerPhase.setForeground(new java.awt.Color(1, 1, 1));
+
+        textAreaInfo.setColumns(20);
+        textAreaInfo.setRows(5);
+        jScrollPane1.setViewportView(textAreaInfo);
+
+        buttonAttack.setText("attack");
+        buttonAttack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                nextPhaseButtonActionPerformed(evt);
+                buttonAttackActionPerformed(evt);
             }
         });
 
-        attackButton.setText("attack");
-        attackButton.addActionListener(new java.awt.event.ActionListener() {
+        buttonNextPhase.setText("nextPhase");
+        buttonNextPhase.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                attackButtonActionPerformed(evt);
+                buttonNextPhaseActionPerformed(evt);
             }
         });
 
-        moreInfoButton.setText("more Info");
-        moreInfoButton.addActionListener(new java.awt.event.ActionListener() {
+        buttonMoreInfo.setText("MoreInfo");
+        buttonMoreInfo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                moreInfoButtonActionPerformed(evt);
+                buttonMoreInfoActionPerformed(evt);
             }
         });
 
@@ -96,51 +102,52 @@ public class GUI extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelPlayerPhase, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(labelMap)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(nextPhaseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 262, Short.MAX_VALUE)
-                            .addComponent(attackButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(moreInfoButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(playerPhaseLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jScrollPane1)
+                            .addComponent(buttonAttack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(buttonNextPhase, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(buttonMoreInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(playerPhaseLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
-                .addGap(290, 290, 290)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addComponent(labelPlayerPhase, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(labelMap)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(moreInfoButton, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(attackButton, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(buttonMoreInfo, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(nextPhaseButton, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)))
-                .addContainerGap())
+                        .addComponent(buttonNextPhase, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(buttonAttack, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void moreInfoButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_moreInfoButtonActionPerformed
-    }//GEN-LAST:event_moreInfoButtonActionPerformed
+    private void buttonMoreInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonMoreInfoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_buttonMoreInfoActionPerformed
 
-    private void nextPhaseButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextPhaseButtonActionPerformed
+    private void buttonNextPhaseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonNextPhaseActionPerformed
         game.nextPhase();
         update();
-    }//GEN-LAST:event_nextPhaseButtonActionPerformed
+    }//GEN-LAST:event_buttonNextPhaseActionPerformed
 
-    private void attackButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_attackButtonActionPerformed
+    private void buttonAttackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAttackActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_attackButtonActionPerformed
-
-        
+    }//GEN-LAST:event_buttonAttackActionPerformed
     /**
      * Procedurone per la creazione di una map<Color,String> a partire da un file di testo 
      * contenente un numero a piacere di linee, dove ogni linea contiene un [token] avente la forma:
@@ -184,12 +191,12 @@ public class GUI extends javax.swing.JFrame {
     }   
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton attackButton;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JButton buttonAttack;
+    private javax.swing.JButton buttonMoreInfo;
+    private javax.swing.JButton buttonNextPhase;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelMap;
-    private javax.swing.JButton moreInfoButton;
-    private javax.swing.JButton nextPhaseButton;
-    private javax.swing.JLabel playerPhaseLabel;
+    private javax.swing.JLabel labelPlayerPhase;
+    private javax.swing.JTextArea textAreaInfo;
     // End of variables declaration//GEN-END:variables
 }
