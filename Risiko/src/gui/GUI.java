@@ -1,13 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gui;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -17,39 +15,41 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.Scanner;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import risiko.Country;
 import risiko.Phase;
 import risiko.Game;
 import risiko.Player;
 
 /**
- *
  * @author andrea
  */
 public class GUI extends JFrame implements Observer{
-
     private Game game;
     private final Map<Color, String>  colorCountryNameMap;
+    private final int N_GIOCATORI=2;
 
     public GUI() throws Exception {
         initComponents();
-        game = new Game(2/*, this*/);
+        game = new Game(N_GIOCATORI);
         colorCountryNameMap=readColorTextMap("src/gui/color.txt");
         LabelMapListener labelMapListener = new LabelMapListener(convertToBufferedImage(labelMap), colorCountryNameMap, game);
         labelMap.addMouseListener(labelMapListener);
         labelMap.addMouseMotionListener(labelMapListener);
-        labelPlayerPhase.setText(game.getInfo());
+        labelPlayerPhase.setText(game.getPlayerPhase());
     }
     
     private void update() {
-        this.labelPlayerPhase.setText(game.getInfo());
-        if (game.getPhase().equals(Phase.REINFORCE)){           
+        this.labelPlayerPhase.setText(game.getPlayerPhase());
+        if (game.getPhase().equals(Phase.REINFORCE)){
         }
-        if (game.getAttackResult() != null) 
-            this.textAreaInfo.setText(game.getAttackResult().toString());
     }
 
     /**
@@ -113,11 +113,10 @@ public class GUI extends JFrame implements Observer{
                         .addComponent(labelMap)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1)
                             .addComponent(buttonAttack, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(buttonNextPhase, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(buttonMoreInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(buttonNextPhase, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
+                            .addComponent(buttonMoreInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -143,14 +142,10 @@ public class GUI extends JFrame implements Observer{
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonMoreInfoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonMoreInfoActionPerformed
-        String format = "%1$-30s %2$-15s %3$s";
-        String info;
-        info=String.format(format, "territorio", "proprietario", "numero armate") + "\n";//"territorio\t\tproprietario\t\tnumero armate\n");
-        //format=""
-        for (Map.Entry<Country, Player> e : game.getCountryPlayer().entrySet()) {
+        String format = "%-30s %-15s %s";
+        String info=String.format(format, "territorio", "proprietario", "numero armate") + "\n";
+        for (Map.Entry<Country, Player> e : game.getCountryPlayer().entrySet()) 
             info+=String.format(format, e.getKey().getName(), e.getValue().getName(), e.getKey().getArmies()) + "\n";
-            //this.gameStatus.append(e.getKey().getName() + "\t\t" + e.getValue().getName() + "\t\t" + e.getKey().getArmies() + "\n");
-        }
         JOptionPane.showMessageDialog(null,info);
     }//GEN-LAST:event_buttonMoreInfoActionPerformed
 
@@ -160,8 +155,52 @@ public class GUI extends JFrame implements Observer{
     }//GEN-LAST:event_buttonNextPhaseActionPerformed
 
     private void buttonAttackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonAttackActionPerformed
-        // TODO add your handling code here:
+        if (game.getPhase().equals(Phase.FIGHT)) {
+            //I controlli sulla validità di AttackerCountryName e DefenderCountryName sono già stati fatti nel metodo mouseClicked di LabelMapListener
+            if (game.getAttackerCountryName()!=null && game.getDefenderCountryName()!=null) {
+                JDialog inputArmies = new JDialog();
+                JPanel dialogPanel = new JPanel(new GridLayout(0, 2));
+                JLabel attackText = new JLabel(" n armate attaccco");
+                JLabel defenseText = new JLabel(" n armate difesa");
+                SpinnerNumberModel attackerModel = new SpinnerNumberModel(1, 1, game.getMaxArmies(game.getAttackerCountryName(), true), 1);
+                SpinnerNumberModel defenserModel = new SpinnerNumberModel(1, 1, game.getMaxArmies(game.getDefenderCountryName(), false), 1);
+                JSpinner attackerArmies = new JSpinner(attackerModel);
+                JSpinner defenserArmies = new JSpinner(defenserModel);
+                JButton execute = new JButton("Esegui");
+                execute.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent ae) {
+                        game.attack((int) attackerArmies.getValue(), (int) defenserArmies.getValue());
+                        textAreaInfo.setText(game.getAttackResult().toString());
+                        if (game.getAttackResult().isIsConquered()) {
+                            JOptionPane.showMessageDialog(null, "Complimenti, il terriotorio in difesa è stato conquistato.");
+                            inputArmies.dispose();
+                            return;
+                        }
+                        if (!game.canAttackFromCountry(game.getAttackerCountryName())) {
+                            JOptionPane.showMessageDialog(null, "Non è più possibile effettuare attacchi da questo territorio.");
+                            inputArmies.dispose();
+                            return;
+                        }
+                        attackerArmies.setModel(new SpinnerNumberModel(1, 1, game.getMaxArmies(game.getAttackerCountryName(),  true), 1));
+                        defenserArmies.setModel(new SpinnerNumberModel(1, 1, game.getMaxArmies(game.getDefenderCountryName(), false), 1));
+                    }
+                });
+                dialogPanel.add(attackText);
+                dialogPanel.add(defenseText);
+                dialogPanel.add(attackerArmies);
+                dialogPanel.add(defenserArmies);
+                dialogPanel.add(execute);
+                inputArmies.add(dialogPanel);
+                inputArmies.setModal(true);
+                inputArmies.setSize(600, 300);
+                inputArmies.setVisible(true);
+            }
+            game.setAttackerCountry(null);
+            game.setDefenderCountry(null);
+        }
     }//GEN-LAST:event_buttonAttackActionPerformed
+    
     /**
      * Procedurone per la creazione di una map<Color,String> a partire da un file di testo 
      * contenente un numero a piacere di linee, dove ogni linea contiene un [token] avente la forma:
